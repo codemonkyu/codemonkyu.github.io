@@ -88,7 +88,7 @@ askubuntu.com](https://askubuntu.com/questions/452070/what-is-vmlinuz-file-on-li
 ## Kernel
 
 - This is the 4th step toward the Linux boot process.
-- After the kernel gets control, its job is to launch or execute initialization scripts called **systemd**or **init**.
+- After the kernel gets control, its job is to launch or execute initialization scripts called **systemd** or **init**.
 - Systemd is a new program that is used in all Latest Linux operating systems.
 - The Kernel uses the initial RAM disk (**initramfs**) as a temporary file system until the physical file system is mounted.
 - Since the system process is first executed by the kernel, it has a process id of **1**.
@@ -105,7 +105,7 @@ askubuntu.com](https://askubuntu.com/questions/452070/what-is-vmlinuz-file-on-li
 ## Systemd
 
 - This is the fifth step toward the Linux boot process.
-- **Systemd**is a next-generation daemon designed to replace the old SysVinit process.
+- **Systemd** is a next-generation daemon designed to replace the old SysVinit process.
 - Its job is to detect the hardware changes happening in real-time on the system in coordination with Kernel.
 - As said Kernel initializes the Systemd process which then starts all software in the user environment.
 - Systemd process is located in **/lib/system/systemd**.

@@ -22,7 +22,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/Linux-NUMA-Non-uniform-memory-
 >  
 > NUMA를 쉽게 이해하기 위해서는 NUMA와 반대 개념에 있는 **UMA 아키텍처** 를 같이 살펴보면 좋다.  
 >  
-> 과거에는 프로세서가 **균일 메모리 접근(UMA) 시스템**으로 설계되어 모든 프로세서가 동일한 버스(공용 BUS)를 통해 메모리에 엑세스하였다. 하지만 이렇게 단일 BUS를 사용하여 여러 CPU가 메모리에 액세스 하는 경우 BUS 대역폭의 제한된 한계 때문에 병목 현상이 발생하는 문제점이 있다.  
+> 과거에는 프로세서가 **균일 메모리 접근(UMA) 시스템** 으로 설계되어 모든 프로세서가 동일한 버스(공용 BUS)를 통해 메모리에 엑세스하였다. 하지만 이렇게 단일 BUS를 사용하여 여러 CPU가 메모리에 액세스 하는 경우 BUS 대역폭의 제한된 한계 때문에 병목 현상이 발생하는 문제점이 있다.  
 >  
 > UMA와 다르게 NUMA 아키텍처에서는 사용가능한 전체 메모리를 개별 CPU에 분할하여 로컬 메모리로 할당한다. 개별 CPU들은 로컬 메모리에 동시에 액세스 할 수 있으며, (로컬 액세스) 로컬 메모리의 용량이 부족한 경우  
 > 다른  CPU에 할당된 로컬 메모리에 접근 할 수 있으나(리모트 액세스)  로컬 액세스에 비해 지연 시간이 늘어나게 된다.  
@@ -91,17 +91,23 @@ NUMA 정책은 아래와 같이 크게 4가지 종류로 구분된다.
 
 "numactl" 명령어를 통해서 위와 같이 Node의 정보를 확인할 수 도 있으며, 아래의 옵션과 같이 사용하여 NUMA 정책을 변경하여 Node별 메모리 접근 방법을 다르게 설정 하여 메모리 관리를 진행할 수 있다.
 
-**--interleave=nodes, -i nodes**Set a memory interleave policy. Memory will be allocated using round robin on *nodes.* When memory cannot be allocated on the current interleave target fall back to other nodes.
+**--interleave=nodes, -i nodes**  
+Set a memory interleave policy. Memory will be allocated using round robin on *nodes.* When memory cannot be allocated on the current interleave target fall back to other nodes.
 
-**--membind=nodes, -m nodes**Only allocate memory from nodes. Allocation will fail when there is not enough memory available on these nodes. *nodes* may be specified as noted above.
+**--membind=nodes, -m nodes**  
+Only allocate memory from nodes. Allocation will fail when there is not enough memory available on these nodes. *nodes* may be specified as noted above.
 
-**--cpunodebind=nodes, -N nodes**Only execute *command* on the CPUs of *nodes.* Note that nodes may consist of multiple CPUs. *nodes* may be specified as noted above.
+**--cpunodebind=nodes, -N nodes**  
+Only execute *command* on the CPUs of *nodes.* Note that nodes may consist of multiple CPUs. *nodes* may be specified as noted above.
 
-**--physcpubind=cpus, -C cpus**Only execute *process* on *cpus.* This accepts cpu numbers as shown in the *processor* fields of */proc/cpuinfo,* or relative cpus as in relative to the current cpuset.
+**--physcpubind=cpus, -C cpus**  
+Only execute *process* on *cpus.* This accepts cpu numbers as shown in the *processor* fields of */proc/cpuinfo,* or relative cpus as in relative to the current cpuset.
 
-**--localalloc, -l**Always allocate on the current node.
+**--localalloc, -l**  
+Always allocate on the current node.
 
-**--preferred=node**Preferably allocate memory on *node,* but if memory cannot be allocated there fall back to other nodes. This option takes only a single node number. Relative notation may be used.
+**--preferred=node**  
+Preferably allocate memory on *node,* but if memory cannot be allocated there fall back to other nodes. This option takes only a single node number. Relative notation may be used.
 
 더 자세한 설명은 다음의 "[numactl](https://linux.die.net/man/8/numactl)" man 페이지를 참고하면 된다.
 

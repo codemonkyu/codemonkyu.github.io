@@ -85,7 +85,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 >   ports:  
 >   - port: 80  
 >     targetPort: 8080  
-> **selector:   #디플로이먼트의 레이블과 같아야 한다.**  
+>  **selector:   #디플로이먼트의 레이블과 같아야 한다.**  
 >     app: test1  
 >
 
@@ -138,7 +138,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 > [root@master1 deploy]# kubectl rollout history deployment test1  
 > deployment.apps/test1  
 > REVISION  **CHANGE-CAUSE**  
-> 1                **<none>**  
+> 1                 **<none>**  
 > =>히스토리의 상세정보가 없어 불편  
 >  
 > * 히스토리 확인 시 상세정보가 보여 작업이 편하므로 어노테이션을 세팅해준다!!  
@@ -289,9 +289,10 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 >  
 > [root@master1 ~]# kubectl get all -o wide  
 > NAME   READY   STATUS    RESTARTS   AGE    IP     NODE      NOMINATED NODE  
-> pod/test1-6bc7bd84c9-2c8vh   **0/1**    Running   0          109s   172.16.166.144   node1  
-> => 사용 가능할 때까지 롤아웃 프로세스는 새 파드를 만들지 않으며 **maxUnavailable속성값 0 때문에 원래 파드도 제거되지 않는다.  
->**......  
+> pod/test1-6bc7bd84c9-2c8vh   **0/1**     Running   0          109s   172.16.166.144   node1  
+> => 사용 가능할 때까지 롤아웃 프로세스는 새 파드를 만들지 않으며 **maxUnavailable속성값 0 때문에 원래 파드도 제거되지 않는다.**  
+>  
+> ......  
 >  
 > NAME          DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES            SELECTOR  
 > **replicaset.apps/test1-6bc7bd84c9   1         1         0       109s   test1        hewon16/test1:3   app=test1,pod-template-hash=6bc7bd84c9**  
@@ -391,10 +392,10 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 >         - name: test1  
 >           containerPort: 8080  
 >         l**ivenessProbe:**  
-> **exec:**  
-> **command:**  
-> **- ls**  
-> **- /var/ready**
+>  **exec:**  
+>  **command:**  
+>  **- ls**  
+>  **- /var/ready**
 
 > [root@master1 deploy]# kubectl apply -f  deploy-liveness-probe.yaml  
 > deployment.apps/test1 created  
@@ -407,8 +408,9 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 >  
 > #에러가 날것이다 상세정보를 통해 속성값 및 에러를 알아보자!  
 > [root@master1 deploy]# kubectl describe pod **test1-6bb7db76cd-c2bg8**  
+>  
 >  State:  Waiting  
->  **Reason:CrashLoopBackOff**  
+>  **Reason: CrashLoopBackOff**  
 > Last State:     **Terminated**  
 > Reason:       **Error**  
 >  Exit Code:    137  
@@ -484,8 +486,8 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 >   **minReadySeconds: 360**  
 >   strategy  
 >     **rollingUpdate:**  
-> **maxSurge: 1**  
-> **maxUnavailable: 0**  
+>  **maxSurge: 1**  
+>  **maxUnavailable: 0**  
 >     type: RollingUpdate  
 >   selector:  
 >     matchLabels:  
@@ -502,13 +504,13 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 >         ports:  
 >         - name: test1  
 >           containerPort: 8080  
->       **readinessProbe:**  
-> **initialDelaySeconds: 240**  
-> **periodSeconds: 5**  
-> **exec:**  
-> **command:**  
-> **- ls**  
-> **- /var/ready**  
+>        **readinessProbe:**  
+>  **initialDelaySeconds: 240**  
+>  **periodSeconds: 5**  
+>  **exec:**  
+>  **command:**  
+>  **- ls**  
+>  **- /var/ready**  
 >  
 >  
 > [root@master1 deploy]# kubectl apply -f deploy-minready-readiness-probe.yaml  
@@ -530,8 +532,9 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 > ---
 >
 >  
-> **2단계  
-> #새버전 v2를 배포하여본다.**[root@master1 deploy]# kubectl set image deployment test1 **test1=hewon16/test1:2  
+> **2단계**  
+> **#새버전 v2를 배포하여본다.**  
+> [root@master1 deploy]# kubectl set image deployment test1 **test1=hewon16/test1:2  
 >**
 >
 > [root@master1 deploy]# kubectl get pod  

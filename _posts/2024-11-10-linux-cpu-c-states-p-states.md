@@ -71,15 +71,16 @@ Amazon EC2 Linux 인스턴스에 대한 프로세서 상태 제어
 >   On-line CPU(s) list:    0-35  
 > Vendor ID:                GenuineIntel  
 >   BIOS Vendor ID:         Intel  
->  **Model name:             Intel(R) Xeon(R) CPU E5-2666 v3 @ 2.90GHz**  
+>   **Model name:             Intel(R) Xeon(R) CPU E5-2666 v3 @ 2.90GHz**  
 >     CPU family:           6  
 >     Model:                63  
 >     Thread(s) per core:   2  
 >     Core(s) per socket:   9  
 >     Socket(s):            2  
 >     Stepping:             2  
->    **CPU max MHz:          3500.0000**  
-> **CPU min MHz:          1200.0000**...  
+>     **CPU max MHz:          3500.0000**  
+>  **CPU min MHz:          1200.0000**  
+> ...  
 > ...  
 > ...
 
@@ -205,7 +206,7 @@ GRUB_TIMEOUT=0
 
 ### (5). 테스트 2 (C-state 비활성화 후)
 
-C-state를 비활성화 후 이전과 동일한 명령어로 테스트를 진행해보면 최대 주파수가 **3.2GHz** 로 고정되고 있는 것을 확인 가능하다. 이는 C-state 모드를 비활성화 하여 코어별 유휴 상태를 이용한 Headroom이 존재하지 않기 때문에 특정 코어에 부하가 집중되고 있음에도 프로세서가 지원하는 최대 주파수인 **3.5Ghz를**전부 사용하지 않고 있는 것이다.
+C-state를 비활성화 후 이전과 동일한 명령어로 테스트를 진행해보면 최대 주파수가 **3.2GHz** 로 고정되고 있는 것을 확인 가능하다. 이는 C-state 모드를 비활성화 하여 코어별 유휴 상태를 이용한 Headroom이 존재하지 않기 때문에 특정 코어에 부하가 집중되고 있음에도 프로세서가 지원하는 최대 주파수인 **3.5Ghz를** 전부 사용하지 않고 있는 것이다.
 
 ```bash
 $ sudo turbostat stress -c 2 -t 10

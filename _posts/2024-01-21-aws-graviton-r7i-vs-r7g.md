@@ -24,7 +24,7 @@ r7g.xlarge
 
 그럼 Graviton 프로세서(ARM)는 다른 프로세서(x86)와 어떠한 차이점이 있을까 ?
 
-가장 큰 차이점은 바로  아키텍처 설계 시 **"RISC, CISC"**중 어떠한 방식을 채택하였는지이다.
+가장 큰 차이점은 바로  아키텍처 설계 시 **"RISC, CISC"** 중 어떠한 방식을 채택하였는지이다.
 
 각각의 아키텍처 설계 방식은 아래와 같은 특징이 있다.
 
@@ -203,9 +203,7 @@ Threads fairness:
     execution time (avg/stddev):   2.3414/0.04
 ```
 
-**
-
-[2]. R7g.xlarge**
+**[2]. R7g.xlarge**
 
 ```bash
 General statistics:

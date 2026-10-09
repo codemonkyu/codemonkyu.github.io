@@ -23,18 +23,22 @@ _출처 : https://www.redhat.com/ko/blog/what-are-rhel-place-upgrades_
 
 * RHEL 7에서 RHEL 8로의 인플레이스 업그레이드 프로세스는 다음과 같이 요약할 수 있다.
 
-1. **업그레이드 계획**- 시스템 요구 사항 및 제한 사항을 검토합니다. 시스템이 인플레이스 업그레이드에 적합한 후보인지 또는 대신 RHEL 8을 새로 설치해야 하는지 확인합니다.
+1. **업그레이드 계획**  
+   - 시스템 요구 사항 및 제한 사항을 검토합니다. 시스템이 인플레이스 업그레이드에 적합한 후보인지 또는 대신 RHEL 8을 새로 설치해야 하는지 확인합니다.
 
-2. **업그레이드 준비**- 업그레이드 프로세스를 시작하기 전에 RHEL 7 시스템의 백업 생성을 포함하여 필요한 준비 단계를 완료합니다.
+2. **업그레이드 준비**  
+   - 업그레이드 프로세스를 시작하기 전에 RHEL 7 시스템의 백업 생성을 포함하여 필요한 준비 단계를 완료합니다.
 
 3. **업그레이드 전 보고서를 실행하고 검토**- 발견된 문제를 해결하고 권장 솔루션을 적용합니다. 업그레이드 전 유틸리티를 다시 실행하여 모든 심각한 문제가 해결되었는지 확인합니다. 시스템이 업그레이드를 준비하기 전에 업그레이드 전 보고서를 실행하고 발견된 문제를 여러 번 해결해야 할 수 있습니다.  
    - 인플레이스 업그레이드를 수행하는 대신 RHEL 8의 새로 설치로 전환합니다.  
    - 업그레이드 전 유틸리티를 실행하여 업그레이드 전에 해결해야 하는 잠재적인 문제를 요약하는 보고서를 생성합니다.  
    - 발견된 문제의 심각도 및 영향에 따라 문제를 해결하는 데 필요한 작업 양에 따라 다음 결과 중 하나를 진행합니다.
 
-4. **인플레이스 업그레이드를 수행**- RHEL 8로 업그레이드를 수행하고 업그레이드가 올바르게 완료되었는지 확인합니다. 업그레이드할 수 없는 문제가 발생하면 RHEL 7 백업으로 롤백하십시오.
+4. **인플레이스 업그레이드를 수행**  
+   - RHEL 8로 업그레이드를 수행하고 업그레이드가 올바르게 완료되었는지 확인합니다. 업그레이드할 수 없는 문제가 발생하면 RHEL 7 백업으로 롤백하십시오.
 
-5. **업그레이드 후 단계 수행**- 필요한 업그레이드 후 단계를 수행하여 RHEL 8 시스템이 올바르게 설정되었는지 확인합니다.
+5. **업그레이드 후 단계 수행**  
+   - 필요한 업그레이드 후 단계를 수행하여 RHEL 8 시스템이 올바르게 설정되었는지 확인합니다.
 
 ---
 
@@ -70,42 +74,52 @@ Red Hat Enterprise Linux Server release 7.9 (Maipo)
 
 **2. Red Hat Subscription-Manager에 시스템이 등록되어 있는지 확인 합니다.**
 
-[root@~]# subscription-manager identity  
-system identity: 7b36d575-c923-4b4f-a689-886890f9acc3  
-name: serverc  
-org name: Operations  
-org ID: Operations  
+```text
+[root@~]# subscription-manager identity
+system identity: 7b36d575-c923-4b4f-a689-886890f9acc3
+name: serverc
+org name: Operations
+org ID: Operations
 environment name: Library/leapp-upgrade
+```
 
 **3. 시스템 전체에 대한 업데이트를 진행합니다.**
 
-[root@~]# yum update  
-...output omitted...  
-Is this ok [y/d/N]: y  
-...output omitted...  
+```text
+[root@~]# yum update
+...output omitted...
+Is this ok [y/d/N]: y
+...output omitted...
 Complete!
+```
 
 **4. 인플레이스 업그레이드에 필요한 Repository가 존재하는지 확인 합니다.**
 
-[root@~]# yum repolist  
-...output omitted...  
-repo id repo name status  
-!rhel-7-server-rpms/7Server/x86_64 Red Hat Enterprise Linux 7 Server (RPMs) 34,270  
+```text
+[root@~]# yum repolist
+...output omitted...
+repo id repo name status
+!rhel-7-server-rpms/7Server/x86_64 Red Hat Enterprise Linux 7 Server (RPMs) 34,270
 repolist: 34,270
+```
 
 *인플레이스 업그레이드를 위해서는 **'rhel-7-server-rpms'와 'rhel-7-server-extras-rpms' 두 레포지토리가 필요합니다. 5. 아래의 명령어를 통해 필요한 'rhel-7-server-extras-rpms' 레포지토리를 활성화 합니다.**
 
-[root@~]# subscription-manager repos --enable rhel-7-server-extras-rpms  
+```text
+[root@~]# subscription-manager repos --enable rhel-7-server-extras-rpms
 Repository 'rhel-7-server-extras-rpms' is enabled for this system.
+```
 
 **6. 레포지토리가 정상적으로 활성화 되었는지 확인 합니다.**
 
-[root@~]# yum repolist  
-...output omitted...  
-repo id repo name status  
-rhel-7-server-extras-rpms/x86_64 Red Hat Enterprise Linux 7 Server - Extras (RPMs) 1,468  
-rhel-7-server-rpms/7Server/x86_64 Red Hat Enterprise Linux 7 Server (RPMs) 34,270  
+```text
+[root@~]# yum repolist
+...output omitted...
+repo id repo name status
+rhel-7-server-extras-rpms/x86_64 Red Hat Enterprise Linux 7 Server - Extras (RPMs) 1,468
+rhel-7-server-rpms/7Server/x86_64 Red Hat Enterprise Linux 7 Server (RPMs) 34,270
 repolist: 35,738
+```
 
 **7. subscription-manager에 설정된 버전 고정이 있으면 정상적으로 업그레이드가 되지 않기 때문에 이를 해제 합니다.**
 
@@ -114,17 +128,21 @@ Release preference has been unset
 
 **8. yum 패키지 관리자에 패키지 versionlock이 되어 있으면 이를 해제 합니다.**
 
-[root@~]# yum versionlock clear  
-Loaded plugins: product-id, search-disabled-repos, subscription-manager, versionlock  
+```text
+[root@~]# yum versionlock clear
+Loaded plugins: product-id, search-disabled-repos, subscription-manager, versionlock
 versionlock cleared
+```
 
 **9. 인플레이스 업그레이드에 필요한 leapp-upgrade 패키지를 설치합니다.**
 
-[root@~]# yum install leapp-upgrade  
-...output omitted...  
-Is this ok [y/d/N]: y  
-...output omitted...  
+```text
+[root@~]# yum install leapp-upgrade
+...output omitted...
+Is this ok [y/d/N]: y
+...output omitted...
 Complete!
+```
 
 ---
 
@@ -245,9 +263,7 @@ Reports summary:
 [root@~]# **reboot**  
 ...output omitted...
 
-**2. 업그레이드 진행 후 아래의 작업을 통해 업그레이드 이후 시스템에 필요 없는 부분들을 정리하며 확인한다.
-
-2-1. 아래의 명령어들을 확인하여 인플레이스 업그레이드가 정상적으로 진행 되었는지 시스템 확인**
+**2. 업그레이드 진행 후 아래의 작업을 통해 업그레이드 이후 시스템에 필요 없는 부분들을 정리하며 확인한다. 2-1. 아래의 명령어들을 확인하여 인플레이스 업그레이드가 정상적으로 진행 되었는지 시스템 확인**
 
 ```shell
 # subscription-manager release

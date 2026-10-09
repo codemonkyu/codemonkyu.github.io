@@ -58,7 +58,7 @@ redhat-rhui.repo
 (1). Repository ID : A one word unique repository ID e.g. [localrepo].  
 (2). Name : A human readable name for the repository e.g. name=Awesome Local Repo  
 (3). Baseurl : A URL to the repodata directory (where the actual files are kept). file://path, ftp://link, http://link, and https://link addresses are all valid options.  
-(4). Enabled: Whether or not to enable the repository for use when performing updates and installs e.g. enabled=1 (1 - "use this repository", 0 - "do not use this repository").  
+(4). Enabled : Whether or not to enable the repository for use when performing updates and installs e.g. enabled=1 (1 - "use this repository", 0 - "do not use this repository").  
 (5). gpgcheck : GPG(GNU Privacy Guard) 키가 들어있는 저장소의 URL을 적습니다. GPG 키는 rpm 패키지를 인증하는데 사용하는 암호화 서명입니다.
 
 (6). mirrorlist :  mirrorlist에 등록된 경로를 자동으로 찾고 그 사이트를 이용하여 업데이트
@@ -67,8 +67,7 @@ redhat-rhui.repo
 
 ---
 
-**RPM vs YUM  
-**
+**RPM vs YUM**
 
 - RPM(Red Hat Package Manager) vs YUM(Yellow Dog Updater, Modified) [링크](https://phoenixnap.com/kb/rpm-vs-yum)
 
@@ -87,16 +86,13 @@ phoenixnap.com](https://phoenixnap.com/kb/rpm-vs-yum)
 
 ### 특정 패키지 다운로드하기
 
-**| 특정 패키지를 설치할 때 private 망의 서버에서는 패키지 관리자 "yum" 을 사용하여 레포지토리에 등록된 패키지를 설치할 수 없다. 때문에 이러한 상황에서, 인터넷이 가능한 서버에서 rpm 패키지를 다운로드 받아 Private 서버로 이동하여 패키지 설치를 진행하는데 이때 필요한 "yumdownloader" 명령어를 알아보자.
-
-### yum-utils 패키지 설치 yumdownloader 명령어가 있는 yum-utils 패키지를 설치해야 합니다.
+**| 특정 패키지를 설치할 때 private 망의 서버에서는 패키지 관리자 "yum" 을 사용하여 레포지토리에 등록된 패키지를 설치할 수 없다. 때문에 이러한 상황에서, 인터넷이 가능한 서버에서 rpm 패키지를 다운로드 받아 Private 서버로 이동하여 패키지 설치를 진행하는데 이때 필요한 "yumdownloader" 명령어를 알아보자. ### yum-utils 패키지 설치 yumdownloader 명령어가 있는 yum-utils 패키지를 설치해야 합니다.**
 
 ```bash
 $ sudo yum install yum-utils
 ```
 
-**  
-### 사용 yumdownloader 명령어에 --downloadonly 옵션을 주고 다운받을 패키지를 지정하면 현재 폴더에 해당 패키지만 다운로드 됩니다.
+**### 사용 yumdownloader 명령어에 --downloadonly 옵션을 주고 다운받을 패키지를 지정하면 현재 폴더에 해당 패키지만 다운로드 됩니다.**
 
 ```bash
 $ yumdownloader --downloadonly gcc

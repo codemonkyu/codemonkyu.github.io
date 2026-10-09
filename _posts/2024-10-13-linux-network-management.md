@@ -176,18 +176,18 @@ MTU (Maximum Transmission Unit)는 네트워크 인터페이스에서 한 번에
 > 1?: [LOCALHOST] pmtu 9001  
 > 1: ip-172-31-13-141.ap-northeast-2.compute.internal 1.708ms reached  
 > 1: ip-172-31-13-141.ap-northeast-2.compute.internal 0.377ms reached  
-> **Resume :  pmtu 9001 hops 1 back 1 <--- 확인  
->(2). MTU check (in the differen Regions)  
-> ❯ tracepath 35.165.74.115  
+> **Resume :  pmtu 9001 hops 1 back 1 <--- 확인**  
 >  
-> 1?: [LOCALHOST] pmtu 9001  
-> 1: ip-172-31-0-1.ap-northeast-2.compute.internal 0.111ms pmtu 1500  
-> 1: no reply  
-> ..  
-> ...  
-> ..  
-> 30: no reply  
-> Too many hops: pmtu 1500  
+> **(2). MTU check (in the differen Regions)  
+> ❯ tracepath 35.165.74.115**  
+> **1?: [LOCALHOST] pmtu 9001**  
+> **1: ip-172-31-0-1.ap-northeast-2.compute.internal 0.111ms pmtu 1500**  
+> **1: no reply**  
+> **..**  
+> **...**  
+> **..**  
+> **30: no reply**  
+> **Too many hops: pmtu 1500  
 > Resume : *pmtu* *1500 <--- 확인  
 >**(3). MTU check toward Internet  
 > ❯ tracepath google.com  

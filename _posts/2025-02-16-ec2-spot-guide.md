@@ -23,8 +23,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/AWS-Amazon-EC2-Spot-%EC%99%84%
 
 ## 2. Spot 인스턴스 작동 방식
 
-**기본 작동 원리  
-**
+**기본 작동 원리**
 
 - Spot 인스턴스는 AWS의 미사용 EC2 용량을 활용하는 방식으로 작동합니다. AWS가 가진 EC2 인스턴스의 여유 가용 용량은 실시간으로 변동하며, 이에 따라 Spot 가격도 동적으로 조정됩니다.
 

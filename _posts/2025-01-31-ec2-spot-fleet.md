@@ -114,8 +114,7 @@ Amazon EC2 콘솔을 사용하여 스팟 플릿을 생성하는 경우 **AWSServ
 
 Amazon EC2는 다른 AWS 서비스를 자동으로 호출하는 데 필요한 권한에 서비스 연결 역할을 사용합니다. 서비스 연결 역할은 AWS 서비스에 직접 연결된 고유한 유형의 IAM 역할입니다. 이러한 IAM 역할은 아래의 두 가지가 존재합니다.
 
-**- AWSServiceRoleForEC2Spot - AWSServiceRoleForEC2SpotFleet  
-(* 스팟 플릿에서 [암호화된 AMI](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/AMIEncryption.html) 또는 암호화된 Amazon EBS 스냅샷을 지정하는 경우 Amazon EC2에서 자동으로 인스턴스를 시작하려면 CMK를 사용할 권한을 AWSServiceRoleForEC2SpotFleet 역할에 부여해야 합니다.)**
+**- AWSServiceRoleForEC2Spot - AWSServiceRoleForEC2SpotFleet (* 스팟 플릿에서 [암호화된 AMI](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/AMIEncryption.html) 또는 암호화된 Amazon EBS 스냅샷을 지정하는 경우 Amazon EC2에서 자동으로 인스턴스를 시작하려면 CMK를 사용할 권한을 AWSServiceRoleForEC2SpotFleet 역할에 부여해야 합니다.)**
 
 ---
 
