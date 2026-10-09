@@ -7,7 +7,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95%EB%8C%80%EC
 math: true
 ---
 
-> 📅 2026-04-13
+> 📅 2026-04-13  
 > 🎥 출처: [Essence of Linear Algebra – Chapter 14: Eigenvectors and eigenvalues (3Blue1Brown)](https://www.youtube.com/watch?v=PFDu9oVAE-g)
 
 ![](/assets/img/posts/linear-algebra-ch14/01.png)
@@ -200,5 +200,5 @@ $$D^{100} = \begin{pmatrix} \lambda_1^{100} & 0 & \cdots \ 0 & \lambda_2^{100} &
 
 ## 다음 챕터 예고
 
-**Ch.15 — 추상적 벡터 공간 (Abstract Vector Spaces)**
+**Ch.15 — 추상적 벡터 공간 (Abstract Vector Spaces)**  
 벡터란 꼭 화살표일 필요가 없다. 함수, 다항식, 행렬도 벡터처럼 다룰 수 있다 — 선형대수학의 가장 추상적이고 강력한 개념을 만날 차례.

@@ -8,13 +8,13 @@ tistory_url: https://codemonkyu.tistory.com/entry/TCP-TCP-%EC%82%B4%ED%8E%B4%EB%
 
 네트워크를 한 번쯤 배웠지만 "그래서 실제로 어떻게 동작하는데?"가 흐릿한 사람, 면접이나 시험을 앞두고 TCP를 한 번에 훑고 싶은 사람에게 맞는 글이다.
 
-#### **TCP 란?**
+#### TCP 란?
 
 TCP(Transmission Control Protocol)는 신뢰할 수 없는 네트워크 위에서 신뢰할 수 있는 바이트 스트림을 만들어주는 프로토콜이다.
 
 기억할 건 세 가지다. 첫째, 데이터를 보내기 전에 연결을 맺고(handshake), 다 쓰면 닫는다. 둘째, 보낸 데이터가 잘 도착했는지 ACK로 확인하고 안 오면 다시 보낸다. 셋째, 상대와 네트워크가 감당할 만큼만 속도를 조절한다. 이 세 가지가 TCP의 전부다.
 
-#### **왜 TCP가 필요한가: TCP vs UDP**
+#### 왜 TCP가 필요한가: TCP vs UDP
 
 ![TCP vs UDP](/assets/img/posts/tcp-deep-dive/01.gif)
 _TCP vs UDP_
@@ -35,7 +35,7 @@ TCP는 3번 조각이 빠진 걸 시퀀스 번호로 알아채고 다시 받아�
 
 ---
 
-#### **TCP 헤더: 20바이트에 담긴 것들**
+#### TCP 헤더: 20바이트에 담긴 것들
 
 ![TCp 헤더 구조](/assets/img/posts/tcp-deep-dive/02.gif)
 _TCp 헤더 구조_
@@ -52,7 +52,7 @@ Seq와 Ack, 그리고 플래그. 이 셋은 아래에서 자세히 다룬다,
 
 ---
 
-#### **연결 열기: 3-way handshake**
+#### 연결 열기: 3-way handshake
 
 ![3Way Handshake](/assets/img/posts/tcp-deep-dive/03.gif)
 _3Way Handshake_
@@ -67,7 +67,7 @@ _3Way Handshake_
 
 ---
 
-#### **연결 닫기: 4-way handshake**
+#### 연결 닫기: 4-way handshake
 
 ![4Way HandShake](/assets/img/posts/tcp-deep-dive/04.gif)
 _4Way HandShake_
@@ -85,7 +85,7 @@ _4Way HandShake_
 
 ---
 
-#### **전체 그림: 상태 전이도**
+#### 전체 그림: 상태 전이도
 
 ![TCP State](/assets/img/posts/tcp-deep-dive/05.gif)
 _TCP State_
@@ -96,7 +96,7 @@ _TCP State_
 
 ---
 
-#### **신뢰성의 핵심: 재전송**
+#### 신뢰성의 핵심: 재전송
 
 ![TCP Retransmission](/assets/img/posts/tcp-deep-dive/06.gif)
 _TCP Retransmission_
@@ -105,7 +105,7 @@ _TCP Retransmission_
 
 핵심은 단순하다. 보낼 때마다 타이머를 켜고, 정해진 시간(RTO, Retransmission Timeout) 안에 ACK이 안 오면 다시 보낸다.
 
-여기서 인상적인 건, 수신자가 아무것도 하지 않아도 복구된다는 점이다. 유실을 감지하는 주체는 송신자 자신이다.
+여기서 인상적인 건, 수신자가 아무것도 하지 않아도 복구된다는 점이다. 유실을 감지하는 주체는 송신자 자신이다.  
 ACK이 안 오면 "아, 잃어버렸구나" 하고 스스로 다시 보낸다. RTO는 고정값이 아니라 실제 왕복 시간(RTT)을 측정해서 동적으로 조절한다. 네트워크가 느려지면 타이머도 늘어난다.
 
 참고로 실제 TCP는 타이머 말고도 빠른 재전송(fast retransmit)이라는 더 빠른 방법도 쓴다. 같은 ACK이 3번 중복으로 오면 타이머를 기다리지 않고 바로 재전송하는 방식인데, 이건 중급을 넘어서는 주제라 여기서는 "타이머 기반 재전송이 기본이다" 정도만 잡고 가자.
@@ -125,12 +125,12 @@ _TCP Sliding Window_
 
 ---
 
-#### **네트워크를 배려하기: 혼잡 제어**
+#### 네트워크를 배려하기: 혼잡 제어
 
 ![TCP Congestion](/assets/img/posts/tcp-deep-dive/08.gif)
 _TCP Congestion_
 
-흐름 제어가 상대(수신자)를 배려하는 거라면, 혼잡 제어는 그 사이의 네트워크를 배려하는 것이다.
+흐름 제어가 상대(수신자)를 배려하는 거라면, 혼잡 제어는 그 사이의 네트워크를 배려하는 것이다.  
 둘은 자주 헷갈리는데, 배려 대상이 다르다는 것만 기억하면 구분된다. 흐름 제어는 상대방, 혼잡 제어는 중간 경로. 네트워크가 얼마나 붐비는지는 미리 알 수 없다. 그래서 TCP는 작게 시작해서 조금씩 늘려보며 한계를 탐색한다.
 
 처음엔 Slow Start다. 이름은 느리게 시작이지만 증가는 빠르다. cwnd(혼잡 윈도우)를 매 왕복마다 2배로 늘린다. 지수적으로 커진다. 그러다 임계값(ssthresh/Slow Start Threshold)에 도달하면 Congestion Avoidance로 전환해서 이제부터는 매 왕복마다 딱 1씩만 조심스럽게 늘린다.
@@ -148,7 +148,7 @@ _TCP Congestion_
 
 ---
 
-#### **작은 낭비 줄이기: Nagle 알고리즘**
+#### 작은 낭비 줄이기: Nagle 알고리즘
 
 ![TCP Nagle](/assets/img/posts/tcp-deep-dive/09.gif)
 _TCP Nagle_
@@ -161,7 +161,7 @@ Nagle 알고리즘은 간단한 규칙으로 이걸 막는다. "아직 ACK 안 �
 
 실시간성이 중요한 애플리케이션(게임, SSH, 일부 API)에서는 이 "모으는 지연"이 오히려 방해가 된다. 그래서 TCP_NODELAY 옵션으로 Nagle을 꺼버리는 경우도 흔하다.
 
-### **흔한 오해와 헷갈리는 지점**
+### 흔한 오해와 헷갈리는 지점
 
 - 흐름 제어와 혼잡 제어를 같은 것으로 아는 경우가 많다. 배려 대상이 다르다. 흐름 제어는 받는 상대가 넘치지 않게, 혼잡 제어는 중간 네트워크가 막히지 않게 조절한다.
 
@@ -171,7 +171,7 @@ Nagle 알고리즘은 간단한 규칙으로 이걸 막는다. "아직 ACK 안 �
 
 - TIME-WAIT를 불필요한 낭비로 보는 시각도 있는데, 늦게 온 패킷과 마지막 ACK 유실에 대비하는 안전장치다.
 
-## **요약**
+## 요약
 
 TCP는 못 믿을 네트워크 위에 믿을 수 있는 통로를 까는 일이다. 연결을 3-way로 열고(SYN/ACK 교환), 4-way로 닫으며(half-close 때문에 한 번 더), 그 사이에서 재전송으로 신뢰성을, 슬라이딩 윈도우로 상대와의 속도를, 혼잡 제어로 네트워크와의 속도를 맞춘다. 헤더의 Seq·Ack·플래그·윈도우 필드가 이 모든 걸 실어나른다.
 

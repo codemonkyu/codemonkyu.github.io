@@ -6,7 +6,7 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95-%EB%8C%80%EC%88%98-Ch04-%E2%80%94-%ED%96%89%EB%A0%AC-%EA%B3%B1%EC%85%88%EA%B3%BC-%ED%95%A9%EC%84%B1-%EB%B3%80%ED%99%98-Matrix-Multiplication-as-Composition
 ---
 
-> 📅 2026-04-05
+> 📅 2026-04-05  
 > 🎥 출처: [3Blue1Brown - Matrix multiplication as composition](https://livewiki.com/ko/content/matrix-multiplication-composition-chapter-4-essence)
 
 ![](/assets/img/posts/linear-algebra-ch04/01.png)
@@ -42,7 +42,7 @@ M × (x, y)  =  x · T(î)  +  y · T(ĵ)
   → 최종 위치
 ```
 
-이 연속 적용의 전체 효과는 **하나의 새로운 선형 변환**으로 표현할 수 있다.
+이 연속 적용의 전체 효과는 **하나의 새로운 선형 변환**으로 표현할 수 있다.  
 이 새로운 변환을 나타내는 행렬 = **합성 행렬 (Composition Matrix)**
 
 > **핵심:** 합성 행렬 하나로 두 변환을 한 번에 처리할 수 있다.
@@ -160,5 +160,5 @@ C 적용 → B 적용 → A 적용
 
 ## 다음 챕터 예고
 
-**Ch.05 — 3차원 공간의 선형 변환 (Three-dimensional Linear Transformations)**
+**Ch.05 — 3차원 공간의 선형 변환 (Three-dimensional Linear Transformations)**  
 2D에서 익힌 행렬·변환 개념을 3D로 확장하면 어떻게 달라질까?

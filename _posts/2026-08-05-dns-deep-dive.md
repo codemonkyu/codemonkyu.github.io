@@ -8,7 +8,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/DNS-%EB%82%B4%EA%B0%80-%EC%95%
 
 주소창에 도메인을 치면 페이지가 열린다. 그 사이에 일어나는 일을 "DNS가 이름을 IP로 바꿔준다" 한 줄로만 알고 있었다.
 
-언젠가는 자세히 정리해보자 했던 시점 마침 시간이 나서 DNS 에서 질의 하나가 시작해서 끝날 때까지의 순서를 정리했다.
+언젠가는 자세히 정리해보자 했던 시점 마침 시간이 나서 DNS 에서 질의 하나가 시작해서 끝날 때까지의 순서를 정리했다.  
 TCP를 정리했을 때처럼 각 단계를 직접 만든 GIF로 붙였고, 나오는 수치와 출력은 전부 이 글을 쓰면서 실제로 조회한 값이다.
 
 다만 IP와 TTL 값은 조회 시점에 따라 달라지니, 직접 따라 해보면 숫자는 다르게 나오는 게 정상이다. 봐야 할 건 숫자가 아니라 구조다.
@@ -25,7 +25,7 @@ DNS(Domain Name System)는 사람이 읽는 이름을 기계가 쓰는 주소로
 
 ---
 
-#### **DNS는 어떻게 이름을 IP로 바꾸는가**
+### DNS는 어떻게 이름을 IP로 바꾸는가
 
 IP 주소를 직접 외워서 쓴다고 생각해보자. 불편한 건 둘째 문제고, 더 큰 문제는 서버를 옮기면 주소가 바뀐다는 것이다. 이름과 주소를 분리해두면 이름은 그대로 두고 주소만 갈아끼울 수 있다. DNS의 본질은 이 분리다.
 
@@ -40,10 +40,10 @@ _dns-recursive-lookup_
 
 순서를 말로 풀면 이렇다.
 
-1. 브라우저가 리졸버에게 묻는다. "www.example.com의 A 레코드 알려줘."
-2. 리졸버가 루트 네임서버에게 묻는다. 루트는 답을 모른다. 대신 "`.com`은 저 서버가 담당해"라고 알려준다.
-3. 리졸버가 `.com` TLD 서버에게 묻는다. 여기도 답은 모르고 "`example.com`은 저 서버가 담당해"라고만 한다.
-4. 리졸버가 그 권한 네임서버에게 묻는다. 여기가 실제 답을 가진 유일한 곳이다.
+1. 브라우저가 리졸버에게 묻는다. "www.example.com의 A 레코드 알려줘."  
+2. 리졸버가 루트 네임서버에게 묻는다. 루트는 답을 모른다. 대신 "`.com`은 저 서버가 담당해"라고 알려준다.  
+3. 리졸버가 `.com` TLD 서버에게 묻는다. 여기도 답은 모르고 "`example.com`은 저 서버가 담당해"라고만 한다.  
+4. 리졸버가 그 권한 네임서버에게 묻는다. 여기가 실제 답을 가진 유일한 곳이다.  
 5. 리졸버가 답을 캐시에 넣고 브라우저에게 돌려준다.
 
 여기서 중요한 건 2번과 3번이 답이 아니라는 점이다. 루트도 TLD도 `www.example.com`의 IP를 모른다. 그들이 주는 건 "다음에 물어볼 곳"이고, 이걸 위임(referral)이라고 한다. 루트가 아는 건 TLD 목록뿐이다. 그래서 루트에 부하가 몰리지 않는다.
@@ -85,7 +85,7 @@ amazon.com.  172800 IN NS ns-1447.awsdns-52.org.
 
 ---
 
-#### **재귀 질의와 반복 질의**
+### 재귀 질의와 반복 질의
 
 위 과정에는 성격이 다른 두 종류의 질의가 섞여 있다. 이 둘을 구분하지 못하면 "재귀 리졸버"라는 이름이 왜 붙었는지 알 수 없다.
 
@@ -102,7 +102,7 @@ _dns-recursive-vs-iterative_
 
 ---
 
-#### **DNS 캐싱**
+### DNS 캐싱
 
 매번 루트부터 내려간다면 DNS는 진작에 무너졌을 것이다. 실제로는 대부분의 질의가 트리에 닿기 전에 끝난다.
 
@@ -131,7 +131,7 @@ $ sudo killall -HUP mDNSResponder
 
 ---
 
-#### 두 번째 요청이 빠른 이유
+### 두 번째 요청이 빠른 이유
 
 캐시의 효과는 같은 이름을 두 번 물어보면 바로 드러난다.
 
@@ -163,7 +163,7 @@ $ dig @hera.ns.cloudflare.com www.example.com A +noall +comments
 
 ---
 
-#### CNAME: "저기 가서 다시 물어봐"
+### CNAME: "저기 가서 다시 물어봐"
 
 이름을 물었는데 IP가 아니라 또 다른 이름이 돌아올 때가 있다. CNAME이다.
 
@@ -186,7 +186,7 @@ CNAME은 "이 이름은 저 이름의 별명이니 저기 가서 다시 물어�
 
 ---
 
-#### TTL: 레코드를 바꿨는데 왜 바로 안 바뀌는가
+### TTL: 레코드를 바꿨는데 왜 바로 안 바뀌는가
 
 여기가 실무에서 가장 자주 부딪히는 지점이고, 개인적으로 DNS에서 제일 중요하다고 생각하는 부분이다.
 
@@ -219,7 +219,7 @@ TTL을 낮게 유지하면 항상 좋을 것 같지만 그렇지 않다. 캐시 
 
 ---
 
-#### DNS 메시지의 구조
+### DNS 메시지의 구조
 
 지금까지 나온 플래그(RD, AA, TC)들이 어디에 담겨 오는지 보자.
 
@@ -227,10 +227,10 @@ TTL을 낮게 유지하면 항상 좋을 것 같지만 그렇지 않다. 캐시 
 
 질의든 응답이든 같은 틀을 쓴다. Header, Question, Answer, Authority, Additional 다섯 칸이고, 어떤 칸이 채워졌는지가 메시지의 의미를 결정한다.
 
-- Header (12바이트 고정): QR로 질의냐 응답이냐, RD로 재귀를 원하는지, AA로 권한 답인지, RCODE로 성공인지 실패인지를 표시한다
-- Question: 무엇을 물었나. 응답에도 그대로 복사되어 돌아온다
-- Answer: 실제 답
-- Authority: 답 대신 "다음 목적지"가 오는 칸. 앞에서 본 위임이 여기 담긴다
+- Header (12바이트 고정): QR로 질의냐 응답이냐, RD로 재귀를 원하는지, AA로 권한 답인지, RCODE로 성공인지 실패인지를 표시한다  
+- Question: 무엇을 물었나. 응답에도 그대로 복사되어 돌아온다  
+- Answer: 실제 답  
+- Authority: 답 대신 "다음 목적지"가 오는 칸. 앞에서 본 위임이 여기 담긴다  
 - Additional: glue 레코드와 EDNS0가 오는 자리
 
 여기서 구조가 하나로 이어진다. Answer는 비어 있고 Authority만 채워진 응답이 곧 위임이다. 재귀 질의 중간 단계에서 루트와 TLD가 준 게 바로 이 형태의 응답이었다.
@@ -239,7 +239,7 @@ TTL을 낮게 유지하면 항상 좋을 것 같지만 그렇지 않다. 캐시 
 
 ---
 
-#### UDP 512바이트와 TCP 폴백
+### UDP 512바이트와 TCP 폴백
 
 DNS는 UDP를 쓴다고 배운다. 그런데 TCP도 쓴다. 언제 넘어가는지가 이 절의 주제다.
 
@@ -281,7 +281,7 @@ DNS는 UDP만 쓴다고 알고 규칙을 짜면 이런 문제를 만난다.
 
 ---
 
-#### Route 53 Alias: apex에 CNAME을 못 쓰는 문제
+### Route 53 Alias: apex에 CNAME을 못 쓰는 문제
 
 마지막은 AWS 실무로 이어지는 이야기다.
 
@@ -314,13 +314,13 @@ apex에 A와 NS가 공존한다. CNAME으로는 불가능한 조합이고, Alias
 
 정리하면 이렇다.
 
-| 구분 | CNAME | Route 53 Alias |
-|------|-------|----------------|
-| zone apex 사용 | 불가 | 가능 |
-| 저장되는 타입 | CNAME | A 또는 AAAA |
-| 해석 방식 | 클라이언트가 다시 질의 | Route 53이 내부에서 치환 |
-| 대상 | 임의의 이름 | AWS 리소스로 한정 (ELB, CloudFront, S3 등) |
-| 질의 요금 | 부과 | 무료 |
+| 구분 | CNAME | Route 53 Alias |<br>
+|------|-------|----------------|<br>
+| zone apex 사용 | 불가 | 가능 |<br>
+| 저장되는 타입 | CNAME | A 또는 AAAA |<br>
+| 해석 방식 | 클라이언트가 다시 질의 | Route 53이 내부에서 치환 |<br>
+| 대상 | 임의의 이름 | AWS 리소스로 한정 (ELB, CloudFront, S3 등) |<br>
+| 질의 요금 | 부과 | 무료 |<br>
 
 주의할 점은 Alias가 DNS 표준이 아니라는 것이다. Route 53의 기능이고, 밖에서 보면 그냥 A 레코드다. 그래서 `dig`로는 Alias인지 아닌지 직접 구분할 수 없다. apex인데 A로 응답한다는 정황으로 짐작할 뿐이다.
 
@@ -350,8 +350,8 @@ DNS가 평문 UDP라는 사실이 왜 문제가 되는지부터 보면 자연스
 
 ## 참고 자료
 
-- [RFC 1034 - Domain Names, Concepts and Facilities](<https://www.rfc-editor.org/rfc/rfc1034.html>) — DNS의 개념과 위임 구조, CNAME 단독 존재 규칙의 원문
-- [RFC 1035 - Domain Names, Implementation and Specification](<https://www.rfc-editor.org/rfc/rfc1035.html>) — 메시지 포맷, 512바이트 제한, TC 플래그 정의
-- [RFC 6891 - Extension Mechanisms for DNS (EDNS(0))](<https://www.rfc-editor.org/rfc/rfc6891.html>) — UDP 버퍼 크기를 확장하는 방법
-- [Route 53 - Alias 레코드와 비Alias 레코드 중에서 선택](<https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html>) — Alias의 동작과 지원 대상, 요금 정책
+- [RFC 1034 - Domain Names, Concepts and Facilities](<https://www.rfc-editor.org/rfc/rfc1034.html>) — DNS의 개념과 위임 구조, CNAME 단독 존재 규칙의 원문  
+- [RFC 1035 - Domain Names, Implementation and Specification](<https://www.rfc-editor.org/rfc/rfc1035.html>) — 메시지 포맷, 512바이트 제한, TC 플래그 정의  
+- [RFC 6891 - Extension Mechanisms for DNS (EDNS(0))](<https://www.rfc-editor.org/rfc/rfc6891.html>) — UDP 버퍼 크기를 확장하는 방법  
+- [Route 53 - Alias 레코드와 비Alias 레코드 중에서 선택](<https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html>) — Alias의 동작과 지원 대상, 요금 정책  
 - [MDN - DNS](<https://developer.mozilla.org/ko/docs/Glossary/DNS>) — 짧고 쉬운 개요

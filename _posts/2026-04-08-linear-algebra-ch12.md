@@ -6,7 +6,7 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98%ED%95%99%EC%9D%98-%EB%B3%B8%EC%A7%88-Ch12-%E2%80%94-%ED%81%AC%EB%9D%BC%EB%A9%94%EB%A5%B4-%EA%B3%B5%EC%8B%9D-Cramers-Rule
 ---
 
-> 📅 2026-04-08
+> 📅 2026-04-08  
 > 🎥 출처: [크라메르 공식 소개 및 기하학적 의미 — LiveWiki](https://livewiki.com/ko/content/cramers-rule-linear-algebra)
 
 ![](/assets/img/posts/linear-algebra-ch12/01.png)
@@ -203,7 +203,7 @@ y  =       [1, 7]])   = ──────────────── = ─�
   Aᵢ = i번째 열을 출력벡터 b로 교체한 행렬
 
 핵심 연결고리:
-  좌표 → 넓이/부피
+  좌표 → 넓이/부피  
   변환 → det(A)배 스케일
   ∴ 변환 후 넓이 / det(A) = 원래 좌표
 
@@ -216,5 +216,5 @@ y  =       [1, 7]])   = ──────────────── = ─�
 
 ## 다음 챕터 예고
 
-**Ch.13 — 기저 변환 (Change of Basis)**
+**Ch.13 — 기저 변환 (Change of Basis)**  
 다른 좌표계에서 같은 벡터를 어떻게 표현하는지, 그리고 기저가 달라질 때 행렬이 어떻게 변환되는지 탐구한다.

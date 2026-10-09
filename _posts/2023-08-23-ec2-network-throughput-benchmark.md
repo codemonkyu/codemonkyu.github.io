@@ -13,25 +13,25 @@ _네트워크 이미지 1_
 
 ## Contents
 
-1. 벤치마크의 목적
-2. 벤치마크 Tool - iperf3
-3. 네트워크 테스트 환경 구현
-4. 네트워크 테스트 진행
+1. 벤치마크의 목적  
+2. 벤치마크 Tool - iperf3  
+3. 네트워크 테스트 환경 구현  
+4. 네트워크 테스트 진행  
 5. 결과 분석
 
-Amazon EC2 인스턴스는 유형별 상이한 네트워크 처리량(throughput)를 지원한다.
-이번 포스팅에서는 **"동일한 AWS VPC에 위차한 인스턴스간의 네트워크 처리량"** 벤치마크를 진행하고 이를 분석해보려고 한다.
+Amazon EC2 인스턴스는 유형별 상이한 네트워크 처리량(throughput)를 지원한다.  
+이번 포스팅에서는 **"동일한 AWS VPC에 위차한 인스턴스간의 네트워크 처리량"** 벤치마크를 진행하고 이를 분석해보려고 한다.  
 먼저 목차를 먼저 설명하고 진행해보겠다.
 
 ---
 
-### **1.  벤치마크의 목적**
+### 1.  벤치마크의 목적
 
- 동일한 VPC내에서 인스턴스간의 네트워크 워크로드를 구성할때 "인스턴스에서 지원되는 네트워크 성능"을 확인하는 단계에서 해당 벤치마크 방법을 활용할 수 있다. 또한 동일한 VPC내에서의 네트워크 성능과 Internet Gateway 등을 통한 서로 다른 VPC 에서의 성능 평가에 도움이 될 수 있다.
+동일한 VPC내에서 인스턴스간의 네트워크 워크로드를 구성할때 "인스턴스에서 지원되는 네트워크 성능"을 확인하는 단계에서 해당 벤치마크 방법을 활용할 수 있다. 또한 동일한 VPC내에서의 네트워크 성능과 Internet Gateway 등을 통한 서로 다른 VPC 에서의 성능 평가에 도움이 될 수 있다.
 
 ---
 
-### **2.  iperf3 란?**
+### 2.  iperf3 란?
 
 *** [iperf3](https://docs.oracle.com/cd/E88353_01/html/E37839/iperf3-1.html)**
 
@@ -40,16 +40,16 @@ Amazon EC2 인스턴스는 유형별 상이한 네트워크 처리량(throughput
 iperf3 (1) Name iperf3 - perform network throughput tests Synopsis iperf3 -s [ options ] iperf3 -c server [ options ] Description IPERF3(1) User Manuals IPERF3(1) NAME iperf3 - perform network throughput tests SYNOPSIS iperf3 -s [ options ] iperf3 -c serve
 
 docs.oracle.com](https://docs.oracle.com/cd/E88353_01/html/E37839/iperf3-1.html)
-> - iperf3 is a tool for performing network throughput measurements. It can test TCP, UDP, or SCTP throughput.
+> - iperf3 is a tool for performing network throughput measurements. It can test TCP, UDP, or SCTP throughput.  
 > - Iperf는 네트워크 성능 측정 및 튜닝 도구이다. 크로스 플랫폼 도구이며 모든 네트워크의 표준화된 성능 측정을 생성할 수 있다.
 
 ---
 
-### **3. 네트워크 처리량 테스트 환경 구성**
+### 3. 네트워크 처리량 테스트 환경 구성
 
 네트워크 성능 테스트를 진행하기 위해서는 **client - Sever** 역할을 위한 인스턴스 2대가 필요하다. 따라서 같은 VPC 내에 서브넷 A,B에 각각 1대의 인스턴스 A,B를 생성하여 테스트 환경을 구성한다.
 
-#### **1. TEST 환경 A 를 아래와 같이 구성합니다.**
+#### 1. TEST 환경 A 를 아래와 같이 구성합니다.
 
 **[TEST 환경 A]**
 
@@ -59,10 +59,10 @@ docs.oracle.com](https://docs.oracle.com/cd/E88353_01/html/E37839/iperf3-1.html)
 2. Subnet : Public subnet A
 3. Instnance type : c5.9xlarge
 
-- vCPU : 36
-  Memory (GiB) : 72
-  Network Bandwidth (Gbps)*** : 10(Gbps)
-  EBS Bandwidth (Mbps) : 9,500
+- vCPU : 36  
+Memory (GiB) : 72  
+Network Bandwidth (Gbps)*** : 10(Gbps)  
+EBS Bandwidth (Mbps) : 9,500
 
     4. Security Group
 
@@ -70,7 +70,7 @@ docs.oracle.com](https://docs.oracle.com/cd/E88353_01/html/E37839/iperf3-1.html)
 
 ---
 
-#### **2. TEST 환경 B 를 아래와 같이 구성합니다.**
+#### 2. TEST 환경 B 를 아래와 같이 구성합니다.
 
 **[TEST 환경 B]**
 
@@ -80,10 +80,10 @@ docs.oracle.com](https://docs.oracle.com/cd/E88353_01/html/E37839/iperf3-1.html)
 2. Subnet : Public subnet B
 3. Instnance type : c5.9xlarge
 
-- vCPU : 36
-  Memory (GiB) : 72
-  Network Bandwidth (Gbps)*** : 10(Gbps)
-  EBS Bandwidth (Mbps) : 9,500
+- vCPU : 36  
+Memory (GiB) : 72  
+Network Bandwidth (Gbps)*** : 10(Gbps)  
+EBS Bandwidth (Mbps) : 9,500
 
     4. Security Group
 
@@ -91,9 +91,9 @@ docs.oracle.com](https://docs.oracle.com/cd/E88353_01/html/E37839/iperf3-1.html)
 
 ---
 
-### **4. 네트워크 테스트 진행**
+### 4. 네트워크 테스트 진행
 
-#### **1. Test Steps** **(1). Test Instance A & B에 접속하여 iperf3을 설치합니다.**
+#### 1. Test Steps(1). Test Instance A & B에 접속하여 iperf3을 설치합니다.
 
 > $ sudo yum install iperf3 -y
 
@@ -120,11 +120,11 @@ _iperf3 출력 결과1_
 - **Transfer** is the amount of data exchanged between client and server. In the end, speed test is about transferring files and measuring how long it took.
 - **Bandwidth** is the measured bandwidth
 
- 위 기록은 Instance A에서 B로 iperf3을 사용하여 네트워크 성능을 테스트하여 나온 결과이다. 실제 전송한 데이터의 양은 5.78GBytes 이며 해당 테스트를 통해서 전송된 대역폭은 4.96 Gbits/sec 이다. 해당 서버 및 클라이언트 인스턴스는 "c5.9xlarge"의 **[네트워크 대역폭](https://aws.amazon.com/ko/ec2/instance-types/#Compute_Optimized)**은 **"10(Gbps)"** 임을 위해서 확인했다. 왜 AWS에서 보장하는 네트워크 대역폭이 테스트로 확인되어지지 않은것일까? 의문은 아래의 병렬 연결 옵션을 통해 해소될 수 있었다.
+위 기록은 Instance A에서 B로 iperf3을 사용하여 네트워크 성능을 테스트하여 나온 결과이다. 실제 전송한 데이터의 양은 5.78GBytes 이며 해당 테스트를 통해서 전송된 대역폭은 4.96 Gbits/sec 이다. 해당 서버 및 클라이언트 인스턴스는 "c5.9xlarge"의 **[네트워크 대역폭](https://aws.amazon.com/ko/ec2/instance-types/#Compute_Optimized)**은 **"10(Gbps)"** 임을 위해서 확인했다. 왜 AWS에서 보장하는 네트워크 대역폭이 테스트로 확인되어지지 않은것일까? 의문은 아래의 병렬 연결 옵션을 통해 해소될 수 있었다.
 
-#### **2. 네트워크 대역폭 리밋 확인을 위한 -P 옵션 사용하기**
+#### 2. 네트워크 대역폭 리밋 확인을 위한 -P 옵션 사용하기
 
-> $ iperf3 -c 10.0.0.x -P 2
+> $ iperf3 -c 10.0.0.x -P 2  
 > -P : --parallel # number of parallel client streams to run
 
 위의 명령어를 통해 2개의 병렬 네트워크 커넥션을 생성한 뒤 테스트해 보았다.
@@ -136,17 +136,17 @@ _결과2_
 
 ---
 
-### **5. 다른 리전에 위치한 인스턴스간의 네트워크 대역폭 확인하기**
+### 5. 다른 리전에 위치한 인스턴스간의 네트워크 대역폭 확인하기
 
- AWS 공식 문서를 확인해보면, 다른 리전 및 인터넷 게이트웨이등을 통한 인스턴스간의 네트워크 대역폭은 아래와 같이 설정된다는 것을 알 수 있다.
+AWS 공식 문서를 확인해보면, 다른 리전 및 인터넷 게이트웨이등을 통한 인스턴스간의 네트워크 대역폭은 아래와 같이 설정된다는 것을 알 수 있다.
 
 > 다른 리전, 인터넷 게이트웨이, Direct Connect 또는 로컬 게이트웨이(LGW)로 - 최소 32개의 vCPU가 탑재된 현재 세대 인스턴스에 사용 가능한 네트워크 대역폭의 최대 50%를 트래픽에 활용할 수 있습니다. vCPU가 32개 미만인 현재 세대 인스턴스의 대역폭은 5Gbps로 제한됩니다.
 
- 따라서 현재 구성한 Test A와 B 인스턴스간에 인터넷 게이트 웨이를 통한 네트워크 성능 테스트를 통해 이를 증명해보자. 방법은 다른 리전의 VPC 끼리 통신을 또는 인터넷 게이트 웨이를 통한 통신 등으로 테스트할 수 있으며, 테스트의 간편함을 위해 위에 구성해놓은 테스트 인프라를 사용할 수 있는 "인터넷 게이트 웨이를 통한 통신" 방법을 사용해보자.
+따라서 현재 구성한 Test A와 B 인스턴스간에 인터넷 게이트 웨이를 통한 네트워크 성능 테스트를 통해 이를 증명해보자. 방법은 다른 리전의 VPC 끼리 통신을 또는 인터넷 게이트 웨이를 통한 통신 등으로 테스트할 수 있으며, 테스트의 간편함을 위해 위에 구성해놓은 테스트 인프라를 사용할 수 있는 "인터넷 게이트 웨이를 통한 통신" 방법을 사용해보자.
 
 테스트 방법은 간단하다. 사설 IP가 아닌 공인 IP를 위해 Client에서 Server로 iperf3를 이용한 패킷을 보내면 된다. 방법은 아래와 같다.
 
-#### **Test Steps**
+#### Test Steps
 
 **(1). Test Instance B (Server) 에 접속하여 iperf3를 서버 모드로 실행해줍니다.**
 
@@ -154,7 +154,7 @@ _결과2_
 
 **(2). Test Instance A (Client) 에 접속하여 iperf3를 사용하여 서버 인스턴스에 테스트 패킷을 전송합니다.**
 
-> $ iperf3 -c "test B instance public IP"
+> $ iperf3 -c "test B instance public IP"  
 > $ iperf -c 3.34.138.xxx -P 5
 
 ![결과 3](/assets/img/posts/ec2-network-throughput-benchmark/04.png)

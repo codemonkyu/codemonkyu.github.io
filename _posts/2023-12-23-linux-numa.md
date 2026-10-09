@@ -14,20 +14,21 @@ tistory_url: https://codemonkyu.tistory.com/entry/Linux-NUMA-Non-uniform-memory-
 
 ---
 
-#### NUMA 란?
+## NUMA 란?
 
-> NUMA (Non-uniform memory access) 란
+> NUMA (Non-uniform memory access) 란  
+>  
+> 그대로 해석하면, "불균형 메모리 접근" 으로 멀티 프로세서 환경에서 적용되는 메모리에 대한 접근 방식이다.  
+>  
+> NUMA를 쉽게 이해하기 위해서는 NUMA와 반대 개념에 있는 **UMA 아키텍처** 를 같이 살펴보면 좋다.  
+>  
+> 과거에는 프로세서가 **균일 메모리 접근(UMA) 시스템**으로 설계되어 모든 프로세서가 동일한 버스(공용 BUS)를 통해 메모리에 엑세스하였다. 하지만 이렇게 단일 BUS를 사용하여 여러 CPU가 메모리에 액세스 하는 경우 BUS 대역폭의 제한된 한계 때문에 병목 현상이 발생하는 문제점이 있다.  
+>  
+> UMA와 다르게 NUMA 아키텍처에서는 사용가능한 전체 메모리를 개별 CPU에 분할하여 로컬 메모리로 할당한다. 개별 CPU들은 로컬 메모리에 동시에 액세스 할 수 있으며, (로컬 액세스) 로컬 메모리의 용량이 부족한 경우  
+> 다른  CPU에 할당된 로컬 메모리에 접근 할 수 있으나(리모트 액세스)  로컬 액세스에 비해 지연 시간이 늘어나게 된다.  
+>  
+> 아래의 그림을 보면 UMA 및 NUMA에서의 로컬 액세스와 리모트 액세스가 조금 더 쉽게 이해될 것이다.  
 >
-> 그대로 해석하면, "불균형 메모리 접근" 으로 멀티 프로세서 환경에서 적용되는 메모리에 대한 접근 방식이다.
->
-> NUMA를 쉽게 이해하기 위해서는 NUMA와 반대 개념에 있는 **UMA****아키텍처** 를 같이 살펴보면 좋다.
->
-> 과거에는 프로세서가 **균일 메모리 접근(UMA) 시스템**으로 설계되어 모든 프로세서가 동일한 버스(공용 BUS)를 통해 메모리에 엑세스하였다. 하지만 이렇게 단일 BUS를 사용하여 여러 CPU가 메모리에 액세스 하는 경우 BUS 대역폭의 제한된 한계 때문에 병목 현상이 발생하는 문제점이 있다.
->
-> UMA와 다르게 NUMA 아키텍처에서는 사용가능한 전체 메모리를 개별 CPU에 분할하여 로컬 메모리로 할당한다. 개별 CPU들은 로컬 메모리에 동시에 액세스 할 수 있으며, (로컬 액세스) 로컬 메모리의 용량이 부족한 경우
-> 다른  CPU에 할당된 로컬 메모리에 접근 할 수 있으나(리모트 액세스)  로컬 액세스에 비해 지연 시간이 늘어나게 된다.
->
-> 아래의 그림을 보면 UMA 및 NUMA에서의 로컬 액세스와 리모트 액세스가 조금 더 쉽게 이해될 것이다.
 
 ![출처 : https://www.techplayon.com/what-is-numa-non-uniform-memory-access/](/assets/img/posts/linux-numa/01.png)
 _출처 : https://www.techplayon.com/what-is-numa-non-uniform-memory-access/_
@@ -45,47 +46,47 @@ _NUMA Node :&nbsp;https://windowstechpro.com/what-is-numa/_
 
 NUMA 정책은 아래와 같이 크게 4가지 종류로 구분된다.
 
-#### NUMA 정책
+## NUMA 정책
 
-> 1. [ default ]
-> default 정책은 별도의 설정하지 않은 가장 기본적인 정책이며, 모든 프로세스에 적용된다.
-> 현재 프로세스가 실행되고 있는 프로세서(CPU 코어)가 포함된 노드에서 먼저 메모리를 할당 받아 사용한다.
->
-> 2. [ bind ]
-> bind 정책은, 특정 프로세스를 특정 노드에 바인딩 하여 해당 노드에서만 메모리를 할당받을 수 있게 조절하는 형식이다.
->
-> 3. [ preferred ]
-> preferred 정책은 bind와 비슷하게 선호하는 노드를 설정하여 해당 노드에서 메모리를 우선적으로 할당 받을 수 있게 조절하는 형식이다.
->
-> 4. [ interleaved ]
+> 1. [ default ]  
+> default 정책은 별도의 설정하지 않은 가장 기본적인 정책이며, 모든 프로세스에 적용된다.  
+> 현재 프로세스가 실행되고 있는 프로세서(CPU 코어)가 포함된 노드에서 먼저 메모리를 할당 받아 사용한다.  
+>  
+> 2. [ bind ]  
+> bind 정책은, 특정 프로세스를 특정 노드에 바인딩 하여 해당 노드에서만 메모리를 할당받을 수 있게 조절하는 형식이다.  
+>  
+> 3. [ preferred ]  
+> preferred 정책은 bind와 비슷하게 선호하는 노드를 설정하여 해당 노드에서 메모리를 우선적으로 할당 받을 수 있게 조절하는 형식이다.  
+>  
+> 4. [ interleaved ]  
 > interleaved 정책은 다수의 노드에서 같은 비율의 메모리를 할당 받는 형식이다. RR(Round Robin) 식으로 다수의 노드로 부터 한번 씩 돌아가며 순서대로 메모리를 할당 받는다.
 
 내 Linux 서버에 어떠한 정책이 설정되어 있는지는 "numactl" 명령어를 통해 확인이 가능하다. 해당 명령어를 사용하기 위해서는 해당 명령어 패키지 설치가 선행되어야 한다.
 
-> [root@ip-172-31-26-171 ~]# numactl --show
-> policy: default
-> preferred node: current
-> physcpubind: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-> cpubind: 0
-> nodebind: 0
-> membind: 0
+> [root@ip-172-31-26-171 ~]# numactl --show  
+> policy: default  
+> preferred node: current  
+> physcpubind: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  
+> cpubind: 0  
+> nodebind: 0  
+> membind: 0  
 > preferred:
 
 아래의 명령어를 통해서는 NUMA의 노드와 노드별 할당된 CPU 번호 그리고 할당된 메모리 크기를 확인할 수 있다.
 
-> [root@ip-172-31-26-171 ~]# numactl -H
-> available: 1 nodes (0)  <-- (1)
-> node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  <-- (2)
-> node 0 size: 31116 MB <-- (3)
-> node 0 free: 30431 MB
-> node distances: <-- (4)
-> node   0
+> [root@ip-172-31-26-171 ~]# numactl -H  
+> available: 1 nodes (0)  <-- (1)  
+> node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  <-- (2)  
+> node 0 size: 31116 MB <-- (3)  
+> node 0 free: 30431 MB  
+> node distances: <-- (4)  
+> node   0  
 >   0:  10
 
-(1). NUMA 노드는 1개로 구성되어 있다.
+(1). NUMA 노드는 1개로 구성되어 있다.  
 (2). CPU는 총 16개로 이루어져있다. (프로세서 16개)
 
-(3). 메모리의 크기
+(3). 메모리의 크기  
 (4). 각 노드의 메모리에 접근하는 데 걸리는 시간으로 현재 는 노드가 한개 밖에 없기 때문에 비교가 불가능 하지만 만약 20이 있다면, 노드 0에서 1의 메모리에 접근하는데 2배의 시간이 걸리는 뜻이다.
 
 "numactl" 명령어를 통해서 위와 같이 Node의 정보를 확인할 수 도 있으며, 아래의 옵션과 같이 사용하여 NUMA 정책을 변경하여 Node별 메모리 접근 방법을 다르게 설정 하여 메모리 관리를 진행할 수 있다.
@@ -106,7 +107,7 @@ NUMA 정책은 아래와 같이 크게 4가지 종류로 구분된다.
 
 ---
 
-#### numad 로 메모리 관리하기
+## numad 로 메모리 관리하기
 
 ![Red Hat](/assets/img/posts/linux-numa/03.png)
 _Red Hat_
@@ -121,16 +122,16 @@ numad 는 백그라운드에서 동작하는 데몬으로 시스템상에서 프
 
 아래는 numad와 관련한 문서이다. 필요시 참고하면 좋을 것 같다.
 
-[numad - Linux man page](https://linux.die.net/man/8/numad)
+[numad - Linux man page](https://linux.die.net/man/8/numad)  
 [numad - Red Hat](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/performance_tuning_guide/sect-red_hat_enterprise_linux-performance_tuning_guide-performance_monitoring_tools-numad)
 
 ---
 
-#### 메모리 할당에서 커널 파라미터 "vm.zone_reclaim_mode"
+## 메모리 할당에서 커널 파라미터 "vm.zone_reclaim_mode"
 
-> [root@ip-172-31-26-171 ~]# cat /proc/buddyinfo
-> Node 0, zone      DMA      0      0      0      0      0      0      0      0      1      1      2
-> Node 0, zone    DMA32      4      6      8      8      5      6      4      4      5      3    678
+> [root@ip-172-31-26-171 ~]# cat /proc/buddyinfo  
+> Node 0, zone      DMA      0      0      0      0      0      0      0      0      1      1      2  
+> Node 0, zone    DMA32      4      6      8      8      5      6      4      4      5      3    678  
 > Node 0, zone   Normal    186    502    786    443    136     84     56     21     16     25   6884
 
 "vm.zone_reclaim_mode" 파라미터의 값에 따라 위와 같이 각각의 메모리 영역(DMA, DMA32, ***Normal)**에서 메모리가 부족할 때 다른 Node의 메모리 영역을 할당 할 수 있도록 해준다.  아래의 내용을 확인해보자.

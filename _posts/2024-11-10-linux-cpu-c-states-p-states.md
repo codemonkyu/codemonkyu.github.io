@@ -16,7 +16,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/Linux-Processor-Power-Manageme
 
 ---
 
-### C-state
+## C-state
 
 > CPU가 유휴 상태일 때 에너지를 절약하기 위해 CPU에 저전력 모드로 들어가도록 명령할 수 있습니다. 각 CPU에는 여러 가지 전력 모드가 있으며 이를 통틀어 "C-상태" 또는 "C-모드"라고 합니다.
 
@@ -25,19 +25,19 @@ C-state는 위의 설명과 같이 CPU가 가지고 있는 여러가지 전력 �
 ![그림1](/assets/img/posts/linux-cpu-c-states-p-states/01.png)
 _그림1_
 
-**Typical C-states**
-    C0 – Active Mode: Code is executed, in this state the P-States (see above) are also relevant.
-    C1 – Auto Halt
-    C1E – Auto halt, low frequency, low voltage
-    C2 – Temporary state before C3. Memory path open
-    C3 – L1/L2 caches flush, clocks off
-    C6 – Save core states before shutdown and PLL off
-    C7 – C6 + LLC may be flushed
-    C8 – C7 + LLC must be flushed
+**Typical C-states**  
+C0 – Active Mode: Code is executed, in this state the P-States (see above) are also relevant.  
+C1 – Auto Halt  
+C1E – Auto halt, low frequency, low voltage  
+C2 – Temporary state before C3. Memory path open  
+C3 – L1/L2 caches flush, clocks off  
+C6 – Save core states before shutdown and PLL off  
+C7 – C6 + LLC may be flushed  
+C8 – C7 + LLC must be flushed
 
 ---
 
-### P-state
+## P-state
 
 > P-상태를 사용하면 프로세서 주파수의 가변성을 줄일 수 있습니다. P-상태는 코어에서 원하는 성능(CPU 주파수)을 제어합니다.
 
@@ -48,7 +48,7 @@ _그림2_
 
 ---
 
-### Linux 에서 프로세서 상태 제어
+## Linux 에서 프로세서 상태 제어
 
 간략하게 C-state 그리고 P-state의 개념을 정리하였으니 실제 Linux 에서 프로세서의 상태 제어를 조정하는 법 그리고 상태 별 부하 테스트에 대한 결과 비교를 정리할 예정이다.
 
@@ -56,71 +56,71 @@ _그림2_
 
 [Amazon EC2 Linux 인스턴스에 대한 프로세서 상태 제어](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/processor_state_control.html)
 
-#### (1). m4.16xlarge의 프로세서 확인
+### (1). m4.16xlarge의 프로세서 확인
 
 아래의 명령어를 확인하여 해당 인스턴스의 프로세서 정보를 조회한다.
 
 프로세서 정보를 통해 Thread(s) per core /  Core(s) per socket 및 최소,최대 주파수를 확인할 수 있다.
 
-> **# lscpu**
-> Architecture:             x86_64
->   CPU op-mode(s):         32-bit, 64-bit
->   Address sizes:          46 bits physical, 48 bits virtual
->   Byte Order:             Little Endian
-> **CPU(s):                   36**
->   On-line CPU(s) list:    0-35
-> Vendor ID:                GenuineIntel
->   BIOS Vendor ID:         Intel
->  **Model name:             Intel(R) Xeon(R) CPU E5-2666 v3 @ 2.90GHz**
->     CPU family:           6
->     Model:                63
->     Thread(s) per core:   2
->     Core(s) per socket:   9
->     Socket(s):            2
->     Stepping:             2
->    **CPU max MHz:          3500.0000**
-> **CPU min MHz:          1200.0000**...
-> ...
+> **# lscpu**  
+> Architecture:             x86_64  
+>   CPU op-mode(s):         32-bit, 64-bit  
+>   Address sizes:          46 bits physical, 48 bits virtual  
+>   Byte Order:             Little Endian  
+> **CPU(s):                   36**  
+>   On-line CPU(s) list:    0-35  
+> Vendor ID:                GenuineIntel  
+>   BIOS Vendor ID:         Intel  
+>  **Model name:             Intel(R) Xeon(R) CPU E5-2666 v3 @ 2.90GHz**  
+>     CPU family:           6  
+>     Model:                63  
+>     Thread(s) per core:   2  
+>     Core(s) per socket:   9  
+>     Socket(s):            2  
+>     Stepping:             2  
+>    **CPU max MHz:          3500.0000**  
+> **CPU min MHz:          1200.0000**...  
+> ...  
 > ...
 
-#### (2).  지원하는 C-state 확인
+### (2).  지원하는 C-state 확인
 
 아래의 명령어를 통해 현재 프로세서에서 지원하고 있는 C-state 종류 및 각 종류별 latency를 확인할 수 있다.
 
-> **# cpupower idle-info**
-> CPUidle driver: intel_idle
-> CPUidle governor: menu
-> analyzing CPU 0:
->
-> Number of idle states: 5
-> **Available idle states: POLL C1 C1E C3 C6**
-> **POLL**:
-> Flags/Description: CPUIDLE CORE POLL IDLE
-> Latency: 0
-> Usage: 478
-> Duration: 7748
-> **C1**:
-> Flags/Description: MWAIT 0x00
-> Latency: 2
-> Usage: 656
-> Duration: 83073
-> **C1E**:
-> Flags/Description: MWAIT 0x01
-> Latency: 10
-> Usage: 2981
-> Duration: 494452
-> **C3**:
-> Flags/Description: MWAIT 0x10
-> Latency: 33
-> Usage: 6730
-> Duration: 2975511
-> **C6**:
-> Flags/Description: MWAIT 0x20
-> Latency: 133
-> Usage: 91646
+> **# cpupower idle-info**  
+> CPUidle driver: intel_idle  
+> CPUidle governor: menu  
+> analyzing CPU 0:  
+>  
+> Number of idle states: 5  
+> **Available idle states: POLL C1 C1E C3 C6**  
+> **POLL**:  
+> Flags/Description: CPUIDLE CORE POLL IDLE  
+> Latency: 0  
+> Usage: 478  
+> Duration: 7748  
+> **C1**:  
+> Flags/Description: MWAIT 0x00  
+> Latency: 2  
+> Usage: 656  
+> Duration: 83073  
+> **C1E**:  
+> Flags/Description: MWAIT 0x01  
+> Latency: 10  
+> Usage: 2981  
+> Duration: 494452  
+> **C3**:  
+> Flags/Description: MWAIT 0x10  
+> Latency: 33  
+> Usage: 6730  
+> Duration: 2975511  
+> **C6**:  
+> Flags/Description: MWAIT 0x20  
+> Latency: 133  
+> Usage: 91646  
 > Duration: 182905918
 
-#### (3). 테스트 1 (C-state 비활성화 전)
+### (3). 테스트 1 (C-state 비활성화 전)
 
 아래 테스트를 통해 확인시 가장 낮은 c1 state에 위치했던 vCPU 21, 28이 가장 높은 주파수 (*Turbo Boost)로 동작한 것을 확인 가능하다.
 
@@ -172,7 +172,7 @@ pk cor CPU    %c0  GHz  TSC SMI    %c1    %c3    %c6    %c7   %pc2   %pc3   %pc6
 ...
 ```
 
-#### (4). C-state 비 활성화
+### (4). C-state 비 활성화
 
 만약 일관된 성능을 위해 C-state를 비 활성화를 하고 싶은 경우 아래의 방법을 통해 가능하다.
 
@@ -203,7 +203,7 @@ GRUB_TIMEOUT=0
 [ec2-user ~]$ sudo reboot
 ```
 
-#### (5). 테스트 2 (C-state 비활성화 후)
+### (5). 테스트 2 (C-state 비활성화 후)
 
 C-state를 비활성화 후 이전과 동일한 명령어로 테스트를 진행해보면 최대 주파수가 **3.2GHz** 로 고정되고 있는 것을 확인 가능하다. 이는 C-state 모드를 비활성화 하여 코어별 유휴 상태를 이용한 Headroom이 존재하지 않기 때문에 특정 코어에 부하가 집중되고 있음에도 프로세서가 지원하는 최대 주파수인 **3.5Ghz를**전부 사용하지 않고 있는 것이다.
 
@@ -226,7 +226,7 @@ pk cor CPU    %c0  GHz  TSC SMI    %c1    %c3    %c6    %c7   %pc2   %pc3   %pc6
 
 ---
 
-#### (6).  P-state 설정
+### (6).  P-state 설정
 
 만약 프로세서가 제공하고 있는 모든 코어에 대한 Workload의 작업량이 어느정도 일정한 경우 코어 별 C-state 설정 또는 P-state를 통한 turboboost 동작보다 일관된 동작속도로 꾸준하게 작업을 처리하는 것이 더 나을 수 있다.
 

@@ -8,7 +8,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/Kafka-%EA%B0%84%EB%8B%A8%ED%95
 
 ![](/assets/img/posts/kafka-basics-lab/01.png)
 
-### **Kafka 왜 써요?**
+## Kafka 왜 써요?
 
 메시지 큐는 비동기 메시지를 사용하여 서로 다른 시스템 간의 결합도를 낮추고, 효율적인 데이터 처리와 분산 시스템의 확장성을 제공하기 때문에 많은 서비스에 사용된다. 최근 데이터를 이용하는 서비스들이 많아졌는데 그러한 이유로 kafka와 같은 “메시지 큐” 방식의 데이터 처리 방식의 서비스에 대한 수요가 많아지게 되었다.
 
@@ -20,11 +20,11 @@ tistory_url: https://codemonkyu.tistory.com/entry/Kafka-%EA%B0%84%EB%8B%A8%ED%95
 
 ---
 
-### **Kafka 주요 구성 요소**
+## Kafka 주요 구성 요소
 
 아래는 카프카의 데이터 스트림을 구성하고 있는 주요 요소에 대한 설명이다.
 
-첫 번째는 **'토픽(Topic)'** **이다.** 토픽은 카프카에서 데이터 스트림을 구분하는 단위로, 이벤트(*데이터)가 발행되는 장소라고 생각하면 된다. 토픽은 한 개 이상의 파티션으로 구성되며 파티션내에서 다시 오프셋으로 구분된다.  새로운 이벤트에 대한 토픽이 생성되면 몇개의 파티션에 이벤트(*데이터)를 저장할 것인지 정의할 수 있고 이는 또 다시 세그먼트 형태로 브로커의 로컬 디스크에 저장된다.
+첫 번째는 **'토픽(Topic)' 이다.** 토픽은 카프카에서 데이터 스트림을 구분하는 단위로, 이벤트(*데이터)가 발행되는 장소라고 생각하면 된다. 토픽은 한 개 이상의 파티션으로 구성되며 파티션내에서 다시 오프셋으로 구분된다.  새로운 이벤트에 대한 토픽이 생성되면 몇개의 파티션에 이벤트(*데이터)를 저장할 것인지 정의할 수 있고 이는 또 다시 세그먼트 형태로 브로커의 로컬 디스크에 저장된다.
 
 ![토픽 / 파티션](/assets/img/posts/kafka-basics-lab/03.png)
 _토픽 / 파티션_
@@ -42,23 +42,23 @@ _Producer <--> Kafka Cluster <--> Consumer_
 ![Kafka Cluster Details](/assets/img/posts/kafka-basics-lab/06.png)
 _Kafka Cluster Details_
 
-> 카프카 용어 간단 정리
->
-> - 주키퍼(ZooKeeper) : 카프카의 메타 데이터 관리 및 브로커의 점검 (*Health Check)을 담당한다.
-> - 카프카 클러스터(Kafka Cluster) : 여러대의 브로커로 이루어진 하나의 클러스트
-> - 브로커(Broker) : 카프카 어플리케이션이 설치된 서버(*노드)
-> - 프로듀서(Producer) : 카프카로 메시지를 보내는 역할을 하는 클라이언트
-> - 컨슈머 (Consumer) : 카프카에서 메시지를 꺼내가는 역할을 하는 클라이언트
-> - 토픽 (Topic) : 카프카는 메시지를 토픽으로 구분하고, 각 토픽은 카프카 클러스터 내에 저장됨
-> - 파티션 (Partition) : 병렬 처리 및 고성능을 얻기 위해 하나의 토픽을 여러 개로 구분 한 것
-> - 세그먼트 (Segment) : 프로듀서가 전송한 실제 메시지가 브로커의 로컬 디스크에 저장되는 파일
+> 카프카 용어 간단 정리  
+>  
+> - 주키퍼(ZooKeeper) : 카프카의 메타 데이터 관리 및 브로커의 점검 (*Health Check)을 담당한다.  
+> - 카프카 클러스터(Kafka Cluster) : 여러대의 브로커로 이루어진 하나의 클러스트  
+> - 브로커(Broker) : 카프카 어플리케이션이 설치된 서버(*노드)  
+> - 프로듀서(Producer) : 카프카로 메시지를 보내는 역할을 하는 클라이언트  
+> - 컨슈머 (Consumer) : 카프카에서 메시지를 꺼내가는 역할을 하는 클라이언트  
+> - 토픽 (Topic) : 카프카는 메시지를 토픽으로 구분하고, 각 토픽은 카프카 클러스터 내에 저장됨  
+> - 파티션 (Partition) : 병렬 처리 및 고성능을 얻기 위해 하나의 토픽을 여러 개로 구분 한 것  
+> - 세그먼트 (Segment) : 프로듀서가 전송한 실제 메시지가 브로커의 로컬 디스크에 저장되는 파일  
 > - 메시지 (Messages) 또는 (Record) : 프로듀서가 브로커로 전송하거나 컨슈머가 읽어가는 데이터
 >
 > ---
 
 ---
 
-### **AWS에서 Kafka Cluster 구성하기**
+## AWS에서 Kafka Cluster 구성하기
 
 AWS에서 Managed 서비스로 제공하는 Amazon MSK(Managed Streaming for Apache Kafka) 서비스가 존재하지만 이번 글에서는 위에서 설명한 Kafka Cluster를 EC2 인스턴스를 사용하여 간단하게 Zookeeper 및 Broker 구성 후 토픽을 발행한 후 확인하는 과정까지 해보려고 한다.
 
@@ -68,7 +68,7 @@ AWS에서 Managed 서비스로 제공하는 Amazon MSK(Managed Streaming for Apa
 
 ---
 
-#### **LAB 구성도**
+### LAB 구성도
 
 ![LAB 구성도](/assets/img/posts/kafka-basics-lab/07.png)
 _LAB 구성도_
@@ -85,11 +85,11 @@ _LAB 구성도_
 
 ---
 
-#### **LAB 1 - Kafka 스크립트를 사용한 Topic 생성 및 Pub/Sub 테스트**
+### LAB 1 - Kafka 스크립트를 사용한 Topic 생성 및 Pub/Sub 테스트
 
- 윗 Github의 [Chapter2 명령어](https://github.com/onlybooks/kafka2/blob/main/chapter2/2_commands.txt) 를 통해서 Ansble를 활용한 준비된 인스턴스에 대하여 zookeeper와 kafka-server를 각각 설치해준 후 테스트를 위해 kafka server 01에 접속 후 kafka가 제공하는 쉘 스크립트를 통해 Topic 생성 그리고 동일한 노드에서 Producer / Consumer 쉘을 실행하여 토픽을 통해 정상적으로 메시지를 생성하고 읽어올 수 있는지 확인한다.
+윗 Github의 [Chapter2 명령어](https://github.com/onlybooks/kafka2/blob/main/chapter2/2_commands.txt) 를 통해서 Ansble를 활용한 준비된 인스턴스에 대하여 zookeeper와 kafka-server를 각각 설치해준 후 테스트를 위해 kafka server 01에 접속 후 kafka가 제공하는 쉘 스크립트를 통해 Topic 생성 그리고 동일한 노드에서 Producer / Consumer 쉘을 실행하여 토픽을 통해 정상적으로 메시지를 생성하고 읽어올 수 있는지 확인한다.
 
-#### **LAB 2 - Docker로 Kafka Cluster 구축해보기**
+### LAB 2 - Docker로 Kafka Cluster 구축해보기
 
 자료 : <https://westlife0615.tistory.com/474#8>
 
@@ -99,7 +99,7 @@ _LAB 구성도_
 
 westlife0615.tistory.com](https://westlife0615.tistory.com/474#8)
 
- LAB 1 과 같은 방법 이외에 아래와 같이 Docker Compose 를 통해서 도커 이미지로 손 쉽게 Kafka Cluster + kafdrop을 구축 후 Topic을 생성하고 확인할 수 있다.
+LAB 1 과 같은 방법 이외에 아래와 같이 Docker Compose 를 통해서 도커 이미지로 손 쉽게 Kafka Cluster + kafdrop을 구축 후 Topic을 생성하고 확인할 수 있다.
 
 (1). 아래의 내용의 Docker Compose Yaml 파일 준비
 
@@ -181,7 +181,7 @@ services:
       KAFKA_SOCKET_REQUEST_MAX_BYTES: 100001200
       KAFKA_SOCKET_RECEIVE_BUFFER_BYTES: 10000000
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 3  
     networks:
       - kafka
   kafka3:
@@ -206,7 +206,7 @@ services:
       KAFKA_SOCKET_REQUEST_MAX_BYTES: 100001200
       KAFKA_SOCKET_RECEIVE_BUFFER_BYTES: 10000000
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 3  
     networks:
       - kafka
 networks:

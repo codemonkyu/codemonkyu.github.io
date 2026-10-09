@@ -6,7 +6,7 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98%ED%95%99-Ch6-%E2%80%94-%ED%96%89%EB%A0%AC%EC%8B%9D-The-Determinant
 ---
 
-> 📅 2026-04-06
+> 📅 2026-04-06  
 > 🎥 출처: [The Determinant — Essence of Linear Algebra](https://livewiki.com/ko/content/determinant-essence-linear-algebra)
 
 ![](/assets/img/posts/linear-algebra-ch06/01.png)
@@ -159,6 +159,6 @@ det(AB)         →  det(A) × det(B)
 
 ## 다음 챕터 예고
 
-**Ch.7 — 역행렬, 열공간, 영공간 (Inverse Matrices, Column Space, Null Space)**
-선형 방정식 시스템을 행렬로 표현하고, 역행렬과 행렬식의 관계를 통해 해의 존재 여부를 판단하는 방법을 알아본다.
+**Ch.7 — 역행렬, 열공간, 영공간 (Inverse Matrices, Column Space, Null Space)**  
+선형 방정식 시스템을 행렬로 표현하고, 역행렬과 행렬식의 관계를 통해 해의 존재 여부를 판단하는 방법을 알아본다.  
 ````

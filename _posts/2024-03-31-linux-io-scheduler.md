@@ -26,40 +26,40 @@ _출처 : RHEL8 공식 사이트_
 
 ---
 
-### I/O 스케줄러 확인 및 변경 방법
+## I/O 스케줄러 확인 및 변경 방법
 
 Linux 서버에 장착된 디스크별 설정된 I/O 스케줄러는 아래와 같은 방법으로 확인 및 수정 할 수 있다.
 
 1. 확인
 
-> [root@al2 ~]# cat /sys/block/nvme0n1/queue/scheduler
+> [root@al2 ~]# cat /sys/block/nvme0n1/queue/scheduler  
 > [none] mq-deadline kyber bfq
 
 2. 변경
 
-> [root@al2 ~]# echo bfq > /sys/block/nvme0n1/queue/scheduler
-> [root@al2 ~]# cat /sys/block/nvme0n1/queue/scheduler
+> [root@al2 ~]# echo bfq > /sys/block/nvme0n1/queue/scheduler  
+> [root@al2 ~]# cat /sys/block/nvme0n1/queue/scheduler  
 > mq-deadline kyber [bfq] none
 
 3. Iosched 폴더 확인
 
 I/O 스케줄러를 변경하게 되면, 이에 따라서 Iosched 폴더의 파일의 내용이 변경되게 된다. 이러한 파라미터의 변경으로 각각의 스케줄러는 서로 다르게 동작하는 것을 알 수 있다.
 
-> (1). bfq
-> [root@al2 queue]# ls iosched
-> back_seek_max fifo_expire_async low_latency slice_idle strict_guarantees back_seek_penalty fifo_expire_sync max_budget slice_idle_us timeout_sync
->
-> (2). mq-deadline
-> [root@al2 queue]# ls iosched
-> fifo_batch front_merges read_expire write_expire writes_starved
->
-> (3). kyber
-> [root@al2 queue]# ls iosched
+> (1). bfq  
+> [root@al2 queue]# ls iosched  
+> back_seek_max fifo_expire_async low_latency slice_idle strict_guarantees back_seek_penalty fifo_expire_sync max_budget slice_idle_us timeout_sync  
+>  
+> (2). mq-deadline  
+> [root@al2 queue]# ls iosched  
+> fifo_batch front_merges read_expire write_expire writes_starved  
+>  
+> (3). kyber  
+> [root@al2 queue]# ls iosched  
 > read_lat_nsec write_lat_nsec
 
 ---
 
-### 워크로드 별 I/O 스케줄러
+## 워크로드 별 I/O 스케줄러
 
 디스크 유형인 SSD, HDD에 따라 권장되는 I/O 스케줄러가 다르게 존재한다. 그 이유로는 디스크 유형별 데이터를 읽고 쓰는 물리적 차이에 따라 발생한다. HDD와 같은 경우 직접 데이터가 저장되어 있는 또는 저장될 플래터의 위치로 헤드가 움직여야 하는 물리적 한계가
 
@@ -75,27 +75,27 @@ I/O 스케줄러를 변경하게 되면, 이에 따라서 Iosched 폴더의 파�
 
 ---
 
-### 1. NOOP (No Operation)
+## 1. NOOP (No Operation)
 
 - **특성**: FIFO(First In, First Out) 큐를 사용하여, 최소한의 오버헤드로 요청을 처리합니다. 별도의 정렬이나 복잡한 로직 없이 들어온 순서대로 처리합니다.
 - **권장 워크로드**: SSD 및 SAN(Storage Area Network)과 같은 고속 스토리지 시스템에서 권장됩니다. 이러한 시스템들은 자체적으로 I/O 최적화를 수행하기 때문에, 추가적인 스케줄링 로직이 오히려 성능을 저하시킬 수 있습니다.
 
-### 2. Deadline
+## 2. Deadline
 
 - **특성**: 읽기/쓰기 요청이 데드라인을 넘기지 않도록 보장합니다. 데드라인을 기반으로 요청을 정렬하여, 요청이 오래 대기하지 않도록 합니다.
 - **권장 워크로드**: 대부분의 일반적인 워크로드에 적합하며, 특히 읽기/쓰기 요청의 지연 시간을 최소화해야 하는 데이터베이스 서버와 같은 환경에서 좋습니다.
 
-### 3. CFQ (Completely Fair Queuing)
+## 3. CFQ (Completely Fair Queuing)
 
 - **특성**: 프로세스별로 I/O 대역폭을 공평하게 분배합니다. 각 프로세스에 대한 I/O 요청을 별도로 관리하여, 한 프로세스의 I/O 요청이 다른 프로세스의 성능에 영향을 미치지 않도록 합니다.
 - **권장 워크로드**: 멀티태스킹 환경에서 여러 프로세스가 동시에 다양한 I/O 작업을 수행할 때 적합합니다. 일반적인 데스크탑 환경이나 대화형 시스템에서 유용합니다.
 
-### 4. BFQ (Budget Fair Queuing)
+## 4. BFQ (Budget Fair Queuing)
 
 - **특성**: CFQ와 유사하게 프로세스별로 I/O 대역폭을 공평하게 분배하지만, 더 정교한 방식으로 I/O 성능을 관리합니다.
 - **권장 워크로드**: 멀티미디어 처리 및 실시간 애플리케이션과 같이 일관된 응답 시간이 중요한 환경에서 좋습니다.
 
-### 5. mq-deadline (멀티 큐 데드라인)
+## 5. mq-deadline (멀티 큐 데드라인)
 
 - **특성**: Deadline 스케줄러의 멀티 큐 버전으로, 멀티코어 시스템에서 각 코어가 자체 I/O 큐를 관리할 수 있도록 합니다.
 - **권장 워크로드** :

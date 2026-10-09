@@ -8,12 +8,12 @@ tistory_url: https://codemonkyu.tistory.com/entry/AWS-Amazon-EC2-Spot-%EC%99%84%
 
 ![](/assets/img/posts/ec2-spot-guide/01.png)
 
-금일 포스팅을 통해서 EC2 Spot 인스턴스의 작동 방식, 생성, 관리 및 모니터링 등에 대한 내용을 정리해 보려고 한다.
+금일 포스팅을 통해서 EC2 Spot 인스턴스의 작동 방식, 생성, 관리 및 모니터링 등에 대한 내용을 정리해 보려고 한다.  
 해당 포스팅을 통해서 Spot 인스턴스에 대한 자세한 사용 방법을 공유 한다.
 
 ---
 
-### 1. EC2 인스턴스 가격 옵션
+## 1. EC2 인스턴스 가격 옵션
 
 - **On-Demand**: 언제든지 사용가능한 대신 사용한 만큼의 시간당 요금 지불
 - **Reserved**: 할인된 시간당 요금과 용량 예약(선택 사항)을 제공
@@ -21,15 +21,14 @@ tistory_url: https://codemonkyu.tistory.com/entry/AWS-Amazon-EC2-Spot-%EC%99%84%
 
 ---
 
-### 2. Spot 인스턴스 작동 방식
+## 2. Spot 인스턴스 작동 방식
 
-**기본 작동 원리**
+**기본 작동 원리  
+**
 
 - Spot 인스턴스는 AWS의 미사용 EC2 용량을 활용하는 방식으로 작동합니다. AWS가 가진 EC2 인스턴스의 여유 가용 용량은 실시간으로 변동하며, 이에 따라 Spot 가격도 동적으로 조정됩니다.
 
-**스팟 인스턴스 중단 요소**
-
-**- 용량 -**
+**스팟 인스턴스 중단 요소 - 용량 -**
 
 Amazon EC2는 스팟 인스턴스가 다시 필요할 때 스팟 인스턴스를 중단할 수 있습니다. EC2는 주로 용량을 재활용하기 위해 인스턴스를 회수하지만 호스트 유지 관리 또는 하드웨어 중단과 같은 다른 이유로 회수할 수도 있습니다.
 
@@ -62,16 +61,16 @@ Amazon EC2는 스팟 인스턴스가 다시 필요할 때 스팟 인스턴스를
 
 ---
 
-### 3. Spot 인스턴스 생성하기
+## 3. Spot 인스턴스 생성하기
 
-#### **3-1. Spot Fleet 생성하기**
+### 3-1. Spot Fleet 생성하기
 
 (a). EC2 인스턴스 콘솔 접속 후 **"스팟 요청"** 탭으로 이동 후 **"스팟 플릿 요청 생성"**
 
 ![1](/assets/img/posts/ec2-spot-guide/02.png)
 _1_
 
-(b). Spot Fleet 요청 시 필요한 **"파라미터"**를 결정합니다.
+(b). Spot Fleet 요청 시 필요한 **"파라미터"**를 결정합니다.  
 **- 인스턴스 유형 요구 사항**
 
 ![인스턴스 유형 요구 - 컴퓨팅 요구 사항](/assets/img/posts/ec2-spot-guide/03.png)
@@ -92,7 +91,7 @@ _스팟 할당 방식_
 
 [할당 방식 참고 문서](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/ec2-fleet-allocation-strategy.html#ec2-fleet-allocation-strategies-for-spot-instances)
 
-**가격 용량 최적화****(권장)**
+**가격 용량 최적화(권장)**  
 - 플릿은 시작하는 인스턴스의 수에 맞추어 용량 가용성이 가장 높은 풀을 가져옵니다. 즉, 가까운 시일 내에 중단될 가능성이 가장 낮다고 판단되는 풀에서 스팟 인스턴스를 요청합니다. 그러면 플릿이 해당 풀에서 가장 가격이 낮은 스팟 인스턴스를 요청합니다.
 
 **용량 최적화**
@@ -105,11 +104,11 @@ _스팟 할당 방식_
 
 ---
 
-#### **3-2. AutoScalingGroup 에서 Spot 인스턴스 생성하기**
+### 3-2. AutoScalingGroup 에서 Spot 인스턴스 생성하기
 
 (a). ASG 생성에 사용 할 **"시작 템플릿"**을 생성합니다.
 
-- 시작 템플릿 생성 시 "**고급 세부 정보"** 에서 **"구매 옵션"** 을 **"스팟 인스턴스"**로 설정합니다.
+- 시작 템플릿 생성 시 "**고급 세부 정보"** 에서 **"구매 옵션"** 을 **"스팟 인스턴스"**로 설정합니다.  
 - ASG 에 사용될 스팟 인스턴스 시작 템플릿에서 요청 유형은 **"일회성"**으로 제한 됩니다.
 
 (b). EC2 인스턴스 콘솔에서 AutoScaling -> AutoScaling 그룹 생성 합니다.
@@ -121,7 +120,7 @@ _6_
 
 - 시작 템플릿 적용
 
-(d). 인스턴스 시작 옵션 선택 및AutoScaling 그룹 크기 및 크기 조정 구성
+(d). 인스턴스 시작 옵션 선택 및AutoScaling 그룹 크기 및 크기 조정 구성  
 - 인스턴스 유지 관리 정책은 AutoScaling 그룹에서 인스턴스 교체 이벤트가 발생하는 경우 어떠한 교체 동작을 설정할지 확인하는 부분입니다. -  [참고 문헌](https://docs.aws.amazon.com/ko_kr/autoscaling/ec2/userguide/instance-maintenance-policy-overview-and-considerations.html)
 
 ![7](/assets/img/posts/ec2-spot-guide/08.png)
@@ -129,11 +128,11 @@ _7_
 
 ---
 
-### 4. 생성된 스팟 인스턴스 상태 확인 및 모니터링
+## 4. 생성된 스팟 인스턴스 상태 확인 및 모니터링
 
 - 스팟 인스턴스 요청을 추적하고 스팟 인스턴스 사용 계획을 세우는 데 도움이 되도록 Amazon EC2에서 제공하는 요청 상태를 사용합니다.
 
-#### 4-1. EC2 Spot Instance 요청 작동 방식
+### 4-1. EC2 Spot Instance 요청 작동 방식
 
 ![스팟 인스턴스 작동 방식](/assets/img/posts/ec2-spot-guide/09.png)
 _스팟 인스턴스 작동 방식_

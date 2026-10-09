@@ -6,7 +6,7 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98%ED%95%99-Ch5-%E2%80%94-3%EC%B0%A8%EC%9B%90-%EC%84%A0%ED%98%95-%EB%B3%80%ED%99%98-Three-Dimensional-Linear-Transformations
 ---
 
-> 📅 2026-04-06
+> 📅 2026-04-06  
 > 🎥 출처: [Three-Dimensional Linear Transformations — Essence of Linear Algebra Ch.5](https://livewiki.com/ko/content/three-dimensional-linear-transformations-chapter-5-essence-of-linear-algebra)
 
 ```
@@ -169,6 +169,6 @@ R = R_z(γ) · R_y(β) · R_x(α)
 
 ## 다음 챕터 예고
 
-**Ch.6 — 행렬식 (The Determinant)**
-선형 변환이 공간의 넓이(2D)나 부피(3D)를 얼마나 변화시키는지 하나의 숫자로 표현하는 방법을 알아본다.
+**Ch.6 — 행렬식 (The Determinant)**  
+선형 변환이 공간의 넓이(2D)나 부피(3D)를 얼마나 변화시키는지 하나의 숫자로 표현하는 방법을 알아본다.  
 ````

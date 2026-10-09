@@ -6,7 +6,7 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95-%EB%8C%80%EC%88%98-Ch03-%E2%80%94-%EC%84%A0%ED%98%95-%EB%B3%80%ED%99%98%EA%B3%BC-%ED%96%89%EB%A0%AC-Linear-Transformations-Matrices
 ---
 
-> 📅 2026-04-05
+> 📅 2026-04-05  
 > 🎥 출처: [3Blue1Brown - Linear transformations and matrices](https://livewiki.com/ko/content/linear-transformations-matrices-algebra)
 
 ![](/assets/img/posts/linear-algebra-ch03/01.png)
@@ -15,7 +15,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95-%EB%8C%80%E
 
 ## 1. 변환(Transformation) = 함수(Function)
 
-'변환'은 함수의 다른 표현이다. 입력을 받아 출력을 내보낸다.
+'변환'은 함수의 다른 표현이다. 입력을 받아 출력을 내보낸다.  
 선형대수에서는 **벡터 → 벡터**로 이동시키는 변환을 다룬다.
 
 > 굳이 '변환'이라 부르는 이유: **입력-출력을 공간의 이동으로 시각화**하기 위해서
@@ -184,5 +184,5 @@ M =  [      ]      ←  1열(a,c) = î 도착점, 2열(b,d) = ĵ 도착점
 
 ## 다음 챕터 예고
 
-**Ch.04 — 행렬 곱셈과 합성 변환 (Matrix Multiplication as Composition)**
+**Ch.04 — 행렬 곱셈과 합성 변환 (Matrix Multiplication as Composition)**  
 두 변환을 연속으로 적용하는 것이 왜 행렬 곱셈인가?

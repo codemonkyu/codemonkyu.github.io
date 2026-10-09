@@ -6,7 +6,7 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95-%EB%8C%80%EC%88%98-Ch02-%E2%80%94-%EC%84%A0%ED%98%95-%EC%A1%B0%ED%95%A9-%C2%B7-%EC%8A%A4%ED%8C%AC-%C2%B7-%EA%B8%B0%EC%A0%80-Linear-Combinations-Span-Basis
 ---
 
-> 📅 2026-04-03
+> 📅 2026-04-03  
 > 🎥 출처: [3Blue1Brown - Linear combinations, span, and basis vectors](https://livewiki.com/ko/content/linear-combinations-span-basis-vectors)
 
 ---
@@ -31,7 +31,7 @@ xy 좌표계에는 특별한 두 기준 벡터가 있다.
         = 3 × [1, 0]  +  (-2) × [0, 1]
 ```
 
-> **핵심:** 벡터의 좌표 숫자는 기저 벡터를 스케일링하는 스칼라다.
+> **핵심:** 벡터의 좌표 숫자는 기저 벡터를 스케일링하는 스칼라다.  
 > 다른 기저 벡터를 선택하면 → 완전히 새로운 좌표계가 만들어진다.
 
 ---
@@ -71,7 +71,7 @@ xy 좌표계에는 특별한 두 기준 벡터가 있다.
 
 ### 점으로 시각화하기
 
-> 벡터 하나를 생각할 때 → **화살표**로 시각화
+> 벡터 하나를 생각할 때 → **화살표**로 시각화  
 > 벡터들의 집합을 생각할 때 → **점들의 집합(끝점)**으로 시각화
 
 ---
@@ -128,5 +128,5 @@ xy 좌표계에는 특별한 두 기준 벡터가 있다.
 
 ## 다음 챕터 예고
 
-**Ch.03 — 행렬과 선형 변환 (Matrices & Linear Transformations)**
+**Ch.03 — 행렬과 선형 변환 (Matrices & Linear Transformations)**  
 기저 벡터가 변환되면 공간 전체가 어떻게 변형될까?

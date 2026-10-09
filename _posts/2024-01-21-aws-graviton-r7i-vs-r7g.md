@@ -30,13 +30,11 @@ r7g.xlarge
 
 ---
 
-### **CISC 와 RISC 비교**
+## CISC 와 RISC 비교
 
-| CISC (Complex Instruction Set Computer) | RISC(Reduced Instruction Set Computer) |
-| --- | --- |
-
-| 명령어의 수 | 많다 | 적다 |
+|  | CISC (Complex Instruction Set Computer) | RISC(Reduced Instruction Set Computer) |
 | --- | --- | --- |
+| 명령어의 수 | 많다 | 적다 |
 | 레지스터 | 적다 | 많다 |
 | 처리속도 | 느리다 | 빠르다 |
 | 설계(내부구조) | 복잡하다 | 간단하다 |
@@ -48,7 +46,7 @@ r7g.xlarge
 
 만약 지금 당장 궁금하다면 아래의 글을 참고해보면 좋을 것 같다.
 
- [ARM vs  x86](https://www.redhat.com/ko/topics/linux/ARM-vs-x86)
+[ARM vs  x86](https://www.redhat.com/ko/topics/linux/ARM-vs-x86)
 
 [ARM과 x86의 차이점은 무엇일까요?
 
@@ -74,7 +72,7 @@ aws.amazon.com](https://aws.amazon.com/ko/blogs/korea/join-the-preview-for-new-m
 
 ---
 
-### **R7i .xlarge vs R7g.xlarge 인스턴스 스펙**
+## R7i .xlarge vs R7g.xlarge 인스턴스 스펙
 
 [간편 스펙]
 
@@ -100,11 +98,11 @@ aws.amazon.com](https://aws.amazon.com/ko/blogs/korea/join-the-preview-for-new-m
 
 ---
 
-### **R7i .xlarge vs R7g.xlarge 인스턴스 성능**
+## R7i .xlarge vs R7g.xlarge 인스턴스 성능
 
 각 인스턴스에 대한 CPU 및 Memory 성능을 테스트하기 위하여 벤치마크 도구인 "[sysbench](https://github.com/akopytov/sysbench?tab=readme-ov-file)"를 사용했다.
 
-#### **[CPU] 테스트**
+### [CPU] 테스트
 
 **사용한 명령어**
 
@@ -169,7 +167,7 @@ Threads fairness:
 
 ---
 
-#### **[Memory] 테스트**
+### [Memory] 테스트
 
 **사용한 명령어**
 
@@ -205,7 +203,9 @@ Threads fairness:
     execution time (avg/stddev):   2.3414/0.04
 ```
 
-****[2]. R7g.xlarge****
+**
+
+[2]. R7g.xlarge**
 
 ```bash
 General statistics:
@@ -226,7 +226,7 @@ Threads fairness:
 
 ---
 
-#### **[가격]**
+### [가격]
 
 AWS의 Graviton 프로세서는 클라우드에 최고의 가격 대비 성능을 제공하도록 설계된 프로세서 제품군으로 주로 동일한 인스턴스 패밀리에서 가장 저렴한 가격을 제공한다. 실제 R7i.xlarge 와 R7g.xlarge 인스턴스를 아래의 [AWS price calualtor](https://calculator.aws/#/) 를 사용하여 비교해보면 이를 확실하게 확인 할 수 있다.
 

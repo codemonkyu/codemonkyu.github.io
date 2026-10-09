@@ -7,7 +7,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/Essence-of-Linear-Algebra-Ch13
 math: true
 ---
 
-> 📅 2026-04-09
+> 📅 2026-04-09  
 > 🎥 출처: [Essence of linear algebra, Chapter 13 — 3Blue1Brown](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)
 
 ![](/assets/img/posts/linear-algebra-ch13/01.png)
@@ -27,7 +27,7 @@ v→=3i^+2j^
 | j^=(0,1) | 위쪽 방향 단위 벡터 |
 | 좌표 (3,2) | 각 기저 벡터에 대한 스칼라 |
 
-> **직관:** 좌표는 "공간 속 절대 위치"가 아니라 **"현재 내가 사용하는 기저 벡터 기준의 상대적 위치"** 다.
+> **직관:** 좌표는 "공간 속 절대 위치"가 아니라 **"현재 내가 사용하는 기저 벡터 기준의 상대적 위치"** 다.  
 > 기저가 바뀌면, 같은 벡터도 다른 숫자로 표현된다.
 
 ---
@@ -120,8 +120,8 @@ A^{-1} M A
  (J→우리) (회전) (우리→J)
 ```
 
-M은 **"우리 언어로 쓰인 변환"**
-A,A−1은 **"언어 통역사"**
+M은 **"우리 언어로 쓰인 변환"**  
+A,A−1은 **"언어 통역사"**  
 A−1MA는 **"Jennifer 언어로 번역된 동일한 변환"**
 
 ---
@@ -130,18 +130,18 @@ A−1MA는 **"Jennifer 언어로 번역된 동일한 변환"**
 
 A−1MA 형태는 선형대수학 전반에 걸쳐 자주 등장한다. 이를 **켤레 변환(Conjugate Transformation)** 또는 **닮음 변환(Similar Transformation)**이라 부른다.
 
-> **핵심 아이디어:**
-> 같은 변환이라도 어떤 기저를 쓰느냐에 따라 **표현 방식(행렬)이 달라진다**.
+> **핵심 아이디어:**  
+> 같은 변환이라도 어떤 기저를 쓰느냐에 따라 **표현 방식(행렬)이 달라진다**.  
 > A−1MA는 변환 M을 **다른 기저의 시각으로 바라본 것**이다.
 
-이는 단순한 수식 이상의 의미를 갖는다:
+이는 단순한 수식 이상의 의미를 갖는다:  
 **"내 관점을 상대의 관점으로 바꿔서 동일한 작업을 수행"** — 수학적 공감.
 
 ---
 
 ## 6. 다음 챕터 연결 — 고유벡터와 대각화
 
-영상은 **고유벡터(Eigenvectors)**를 기저로 사용하면
+영상은 **고유벡터(Eigenvectors)**를 기저로 사용하면  
 변환 행렬이 **대각 행렬(Diagonal Matrix)**이 된다는 것을 예고한다:
 
 A−1MA=[λ10 0λ2]
@@ -173,5 +173,5 @@ A⁻¹MA                 = Jennifer 관점에서의 변환 M
 
 ## 다음 챕터 예고
 
-**Ch.14 — 고유벡터와 고유값 (Eigenvectors and Eigenvalues)**
+**Ch.14 — 고유벡터와 고유값 (Eigenvectors and Eigenvalues)**  
 변환을 가해도 방향이 바뀌지 않는 특별한 벡터들 — 그리고 그것이 왜 대각화와 연결되는지 탐구한다.

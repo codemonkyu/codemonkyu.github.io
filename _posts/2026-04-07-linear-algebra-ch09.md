@@ -6,8 +6,8 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98%ED%95%99-Ch9-%E2%80%94-%EB%82%B4%EC%A0%81%EA%B3%BC-%EC%8C%8D%EB%8C%80%EC%84%B1-Dot-Products-and-Duality
 ---
 
-> 📅 2026-04-06
-> 🎥 출처: [Dot products and duality | 3Blue1Brown](https://www.youtube.com/watch?v=LyGKycYT2v0)
+> 📅 2026-04-06  
+> 🎥 출처: [Dot products and duality | 3Blue1Brown](https://www.youtube.com/watch?v=LyGKycYT2v0)  
 > 📖 참고: [LiveWiki 요약](https://livewiki.com/ko/content/dot-products-duality-linear-algebra)
 
 ![](/assets/img/posts/linear-algebra-ch09/01.png)
@@ -64,7 +64,7 @@ v · w = w · v
 
 이것은 벡터 `(a, b)` 와의 **내적과 완전히 동일**하다.
 
-> 핵심: **1×2 행렬 = 옆으로 기울어진 벡터**
+> 핵심: **1×2 행렬 = 옆으로 기울어진 벡터**  
 > 행렬-벡터 곱 ↔ 내적, 이 둘은 같은 연산이다.
 
 ---
@@ -88,7 +88,7 @@ v · w = w · v
 
 ### 단위 벡터가 아닌 경우
 
-û를 3배 스케일 → 행렬이 3배 → 투영값도 3배
+û를 3배 스케일 → 행렬이 3배 → 투영값도 3배  
 = 투영한 뒤 벡터 길이만큼 스케일 업
 
 ```gherkin
@@ -146,6 +146,6 @@ v · w = (v를 w 방향 투영) × |w|
 
 ## 다음 챕터 예고
 
-**Ch.10 — 외적 (Cross Products)**
-3D 공간에서만 정의되는 외적의 기하학적 의미와
+**Ch.10 — 외적 (Cross Products)**  
+3D 공간에서만 정의되는 외적의 기하학적 의미와  
 쌍대성을 통한 외적의 더 깊은 이해를 탐구한다.

@@ -6,8 +6,8 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98%ED%95%99-Ch8-%E2%80%94-%EC%B0%A8%EC%9B%90-%EA%B0%84-%EB%B3%80%ED%99%98%EA%B3%BC-%EB%B9%84%EC%A0%95%EB%B0%A9-%ED%96%89%EB%A0%AC-Nonsquare-Matrices-as-Transformations-Between-Dimensions
 ---
 
-> 📅 2026-04-06
-> 🎥 출처: [Nonsquare matrices as transformations between dimensions | 3Blue1Brown](https://www.youtube.com/watch?v=v8VSDg_WQlA)
+> 📅 2026-04-06  
+> 🎥 출처: [Nonsquare matrices as transformations between dimensions | 3Blue1Brown](https://www.youtube.com/watch?v=v8VSDg_WQlA)  
 > 📖 참고: [LiveWiki 요약](https://livewiki.com/ko/content/nonsquare-matrices-transformations-dimensions)
 
 ![](/assets/img/posts/linear-algebra-ch08/01.png)
@@ -16,7 +16,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95%EB%8C%80%EC
 
 ## 1. 차원 간 변환도 선형 변환이다
 
-지금까지의 논의는 주로 **같은 차원 내의 변환** (2D → 2D, 3D → 3D)이었지만,
+지금까지의 논의는 주로 **같은 차원 내의 변환** (2D → 2D, 3D → 3D)이었지만,  
 **다른 차원 간의 변환**도 완벽하게 합리적인 선형 변환이다.
 
 선형 변환의 특징은 차원이 달라도 동일하게 유지된다:
@@ -24,7 +24,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95%EB%8C%80%EC
 - 격자선이 평행하고 등간격 유지
 - 원점은 원점으로 매핑
 
-**시각화 포인트**: 입력 공간과 출력 공간이 다르기 때문에,
+**시각화 포인트**: 입력 공간과 출력 공간이 다르기 때문에,  
 같은 공간에서 변환되는 것처럼 보이지 않고 **두 공간을 분리해서 시각화**하는 것이 유용하다.
 
 ---
@@ -124,6 +124,6 @@ Full Rank 조건
 
 ## 다음 챕터 예고
 
-**Ch.6 — 내적과 이중성 (Dot Products and Duality)**
-1×n 행렬(2D → 1D 변환)이 내적과 어떻게 연결되는지,
+**Ch.6 — 내적과 이중성 (Dot Products and Duality)**  
+1×n 행렬(2D → 1D 변환)이 내적과 어떻게 연결되는지,  
 그리고 이중성(duality)이라는 우아한 수학적 개념을 시각적으로 탐구한다.

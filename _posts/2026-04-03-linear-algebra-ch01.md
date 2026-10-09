@@ -6,7 +6,7 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95-%EB%8C%80%EC%88%98-Ch01-%E2%80%94-%EB%B2%A1%ED%84%B0-Vectors
 ---
 
-> 📅 2026-04-03
+> 📅 2026-04-03  
 > 🎥 출처: [3Blue1Brown - Essence of Linear Algebra Ch.1](https://livewiki.com/ko/content/coordinates-act-violence-linear-algebra)
 
 ---
@@ -21,7 +21,7 @@ tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95-%EB%8C%80%E
 | **컴퓨터과학** | 순서 있는 숫자 목록(리스트) | `[면적, 방수, 가격]` |
 | **수학** | 합과 스칼라 곱이 정의된 추상적 대상 | 추상적 정의 |
 
-> 💡 **핵심:** 선형 대수의 강점은 이 세 관점을 자유롭게 오갈 수 있다는 것.
+> 💡 **핵심:** 선형 대수의 강점은 이 세 관점을 자유롭게 오갈 수 있다는 것.  
 > 기하학적으로 이해 → 숫자로 계산 → 추상적으로 일반화
 
 ---
@@ -49,7 +49,7 @@ Y
 - Z축 추가 → 세 숫자의 순서 쌍 `[x, y, z]`
 - 예: `[2, 3, 5]` → X로 2, Y로 3, Z로 5
 
-> 💡 **왜 항상 원점에서 시작?**
+> 💡 **왜 항상 원점에서 시작?**  
 > 원점 고정 → 벡터 좌표가 유일하게 결정됨 → 계산이 깔끔해짐
 
 ---
@@ -129,5 +129,5 @@ k × [a, b] = [k·a, k·b]
 
 ## 다음 챕터 예고
 
-**Ch.02 — 선형 결합, 기저, 스팬 (Linear Combinations, Basis, Span)**
+**Ch.02 — 선형 결합, 기저, 스팬 (Linear Combinations, Basis, Span)**  
 벡터 합과 스칼라 곱을 반복하면 어떤 공간을 만들 수 있을까?

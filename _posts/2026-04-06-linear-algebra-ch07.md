@@ -6,8 +6,8 @@ tags: ["선형대수학", "3Blue1Brown"]
 tistory_url: https://codemonkyu.tistory.com/entry/%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98%ED%95%99-Ch7-%E2%80%94-%EC%97%AD%ED%96%89%EB%A0%AC-%EC%97%B4-%EA%B3%B5%EA%B0%84-%EB%9E%AD%ED%81%AC-%EC%98%81-%EA%B3%B5%EA%B0%84-Inverse-Matrices-Column-Space-Rank-Null-Space
 ---
 
-> 📅 2026-04-06
-> 🎥 출처: [Inverse matrices, column space and null space | 3Blue1Brown](https://www.youtube.com/watch?v=uQhTuRlWMxw)
+> 📅 2026-04-06  
+> 🎥 출처: [Inverse matrices, column space and null space | 3Blue1Brown](https://www.youtube.com/watch?v=uQhTuRlWMxw)  
 > 📖 참고: [LiveWiki 요약](https://livewiki.com/ko/content/inverse-matrices-column-space-null-space)
 
 ![](/assets/img/posts/linear-algebra-ch07/01.png)
@@ -71,7 +71,7 @@ x = A⁻¹v
 
 선을 평면으로 되돌릴 수 없듯이 **역행렬 불가능**
 
-> ⚠️ 단, 역행렬이 없어도 해가 존재할 수 있다.
+> ⚠️ 단, 역행렬이 없어도 해가 존재할 수 있다.  
 > 조건: v가 열 공간(Column Space) 안에 있을 때
 
 ---
@@ -117,7 +117,7 @@ Ax = 0  →  해 집합 전체 = Null Space
 | Full Rank | {0} 뿐 (영 벡터만) |
 | 랭크 부족 | 선 또는 평면 전체가 원점으로 압축 |
 
-v = 0 인 경우, Ax = 0 의 해 집합 = 영 공간
+v = 0 인 경우, Ax = 0 의 해 집합 = 영 공간  
 기하학적으로: 평면이 선으로 압축될 때 그 평면 전체가 영 공간
 
 ---
@@ -155,5 +155,5 @@ det(A) = 0
 
 ## 다음 챕터 예고
 
-**Ch.5 — 내적과 이중성 (Dot Products and Duality)**
+**Ch.5 — 내적과 이중성 (Dot Products and Duality)**  
 내적의 기하학적 의미와 선형 변환과의 관계, 그리고 이중성(duality) 개념을 시각적으로 이해한다.
