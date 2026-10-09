@@ -37,25 +37,29 @@ Linux 서버에 장착된 디스크별 설정된 I/O 스케줄러는 아래와 �
 
 2. 변경
 
-> [root@al2 ~]# echo bfq > /sys/block/nvme0n1/queue/scheduler  
-> [root@al2 ~]# cat /sys/block/nvme0n1/queue/scheduler  
-> mq-deadline kyber [bfq] none
+```text
+[root@al2 ~]# echo bfq > /sys/block/nvme0n1/queue/scheduler
+[root@al2 ~]# cat /sys/block/nvme0n1/queue/scheduler
+mq-deadline kyber [bfq] none
+```
 
 3. Iosched 폴더 확인
 
 I/O 스케줄러를 변경하게 되면, 이에 따라서 Iosched 폴더의 파일의 내용이 변경되게 된다. 이러한 파라미터의 변경으로 각각의 스케줄러는 서로 다르게 동작하는 것을 알 수 있다.
 
-> (1). bfq  
-> [root@al2 queue]# ls iosched  
-> back_seek_max fifo_expire_async low_latency slice_idle strict_guarantees back_seek_penalty fifo_expire_sync max_budget slice_idle_us timeout_sync  
->  
-> (2). mq-deadline  
-> [root@al2 queue]# ls iosched  
-> fifo_batch front_merges read_expire write_expire writes_starved  
->  
-> (3). kyber  
-> [root@al2 queue]# ls iosched  
-> read_lat_nsec write_lat_nsec
+```text
+(1). bfq
+[root@al2 queue]# ls iosched
+back_seek_max fifo_expire_async low_latency slice_idle strict_guarantees back_seek_penalty fifo_expire_sync max_budget slice_idle_us timeout_sync
+
+(2). mq-deadline
+[root@al2 queue]# ls iosched
+fifo_batch front_merges read_expire write_expire writes_starved
+
+(3). kyber
+[root@al2 queue]# ls iosched
+read_lat_nsec write_lat_nsec
+```
 
 ---
 

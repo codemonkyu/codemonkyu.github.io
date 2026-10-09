@@ -87,21 +87,23 @@ docs.aws.amazon.com](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/p
 
 볼륨을 생성한 인스턴스에 장착하고 볼륨의 성능 테스트를 위해 "fio" 도구를 설치합니다.
 
-> (1). "fio" 도구 설치  
-> # yum install fio -y  
->  
-> (2). Volume mount  
-> # mkdir /mnt1  
-> # mkfs.xfs /dev/nvme1n1  
-> # mount /dev/nvme1n1 /mnt1  
->  
-> (3). Check mount  
-> # df -h  
-> /dev/nvme1n1 80G 604M 80G 1% /mnt1  
->  
-> # lsblk -f  
-> NAME                 FSTYPE               LABEL                UUID                            MOUNTPOINT  
-> nvme1n1                  xfs                   9da100b2-9a8e-4b7e-9a79-ce3897ef299d                 /mnt1
+```text
+(1). "fio" 도구 설치
+# yum install fio -y
+
+(2). Volume mount
+# mkdir /mnt1
+# mkfs.xfs /dev/nvme1n1
+# mount /dev/nvme1n1 /mnt1
+
+(3). Check mount
+# df -h
+/dev/nvme1n1 80G 604M 80G 1% /mnt1
+
+# lsblk -f
+NAME                 FSTYPE               LABEL                UUID                            MOUNTPOINT
+nvme1n1                  xfs                   9da100b2-9a8e-4b7e-9a79-ce3897ef299d                 /mnt1
+```
 
 볼륨이 정상적으로 마운트 되었으면 fio 도구를 사용하여 볼륨에 대한 i/o 부하를 발생시켜 벤치마크를 진행한다. 우선 볼륨에 설정된 80,000 IOPS를 사용하도록 아래의 명령어를 실행 시킨다.
 

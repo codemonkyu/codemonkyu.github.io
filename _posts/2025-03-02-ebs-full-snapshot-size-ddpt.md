@@ -120,100 +120,94 @@ aws-cli/2.24.7 Python/3.12.6 Linux/6.1.128-136.201.amzn2023.x86_64 exe/x86_64.am
 
 ------
 
-> **(1). 새로운 볼륨을 생성하여 장착 후 볼륨의 용량 사용을 위한 파일을 다운로드 합니다.**  
-> **(*현재 예시에서는 ISO 파일을 다운로드 함.)**  
->  
-> **[root@-]# df -hT**  
-> **Filesystem       Type      Size  Used Avail Use% Mounted on**  
-> **..**  
-> **..**  
-> **/dev/nvme1n1     xfs        30G  6.7G   24G  22% /dd <--- 확인**  
->  
->  
-> **[root@-]# ls -al**  
-> **-rw-r--r--.  1 root root 4762707968 Sep 11 14:38 ubuntu-22.04.5-desktop-amd64.iso <--- 4.4GiB 용량의 파일**  
-> **-rw-r--r--.  1 root root 2136926208 Sep 11 18:46 ubuntu-22.04.5-live-server-amd64.iso <--- 2.0GiB 용량의 파일**  
->  
->  
-> **(2).nvme1n1 볼륨에 대한 스냅샷 A을 생성하고 크기를 관찰합니다.**  
-> **```**  
-> **전체 스냅샷 크기**  
-> **6.4 GiB**  
-> **```**  
->  
->  
-> **(3). 작은 용량을 차지하는 파일을 삭제하고 스냅샷 B를 생성한 뒤 스냅샷 크기를 관찰합니다.**  
-> **[root@ip-]# rm -f ubuntu-22.04.5-live-server-amd64.iso**  
-> **[root@ip-]# df -hT**  
-> **Filesystem       Type      Size  Used Avail Use% Mounted on**  
-> **/dev/nvme1n1     xfs        30G  4.7G   25G  16% /dd**  
->  
-> **```**  
-> **전체 스냅샷 크기**  
-> **6.4 GiB**  
-> **```**  
->  
-> **=> 해당 작업을 통해서 실제 마운트된 볼륨에서 파일 삭제를 진행, 변경된 블록 (*unallocated blocks) 를 생성합니다.**  
->  
-> **(4). dd 명령어를 sparse.img 파일을 생성하고, 루프백 장치로 마운트합니다. 이렇게 하여 실제 마운트 포인트를 이용해 이미지에 접근할 수 있게되며, 이후 "fstrim" 명령어를 통해 마운트된 이미지 파일의 비할당된 블록(삭제된 파일의 블록)을 제거합니다. 해당 과정에서 생성된 sparse.img 파일의 실제 용량은 줄어들게 됩니다.**  
->  
-> **[root@ip-]# dd if=/dev/nvme1n1 of=sparse.img bs=512 status=progress**  
-> **32203947008 bytes (32 GB, 30 GiB) copied, 186 s, 173 MB/s**  
-> **62914560+0 records in**  
-> **62914560+0 records out**  
-> **32212254720 bytes (32 GB, 30 GiB) copied, 186.047 s, 173 MB/s**  
->  
-> **[root@ip-]# ls -al**  
-> **-rw-r--r--.  1 root root 32212254720 Feb 24 11:41 sparse.img <--- Check**  
->  
-> **# mount -o nouuid,loop,discard sparse.img /loop**  
-> *** loop 옵션을 사용합니다.**  
-> *** <https://linux.die.net/man/8/mount>**  
->  
-> **# fstrim /loop**  
-> *** fstrim is used on a mounted filesystem to discard (or "trim") blocks which are not in use by the filesystem.**  
-> *** <https://man7.org/linux/man-pages/man8/fstrim.8.html>**  
->  
-> **(7). ddpt 명령어를 통해 트림(*trim)된 이미지를 빈 볼륨 (*30GiB 용량의 새 볼륨)에 복사합니다. 해당 과정을 통해 실제  할당된 블록에 대한 데이터만 가진 볼륨이 생성 됩니다.**  
->  
-> **[root@ip-]# lsblk**  
-> **NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS**  
-> **nvme1n1       259:1    0   30G  0 disk /dd**  
-> **nvme5n1       259:8    0   30G  0 disk <--- 새 데이터 볼륨 B**  
->  
-> **[root@ip-]# ddpt of=/dev/nvme5n1 if=sparse.img bs=512 oflag=sparse**  
-> **62914560+0 records in**  
-> **9305984+0 records out**  
-> **53608576 bypassed records out**  
-> **time to transfer data: 39.785926 secs at 809.64 MB/sec**  
->  
-> *** ddpt - copies data between files and storage devices. Support for devices that understand the SCSI command set.  
-> ---**
->
-> ddpt 명령어의 oflag=sparse 옵션은 이미지 복사 시 unallocation blocks을 건너뛰어 복사하는 기능을 제공합니다.
->
-> 일반적인 dd 명령어는 볼륨의 모든 블록을 그대로 복사하기 때문에, 삭제된 파일의 블록(unallocation blocks)도 함께 복사됩니다. 이렇게 되면 복사된 볼륨의 크기가 실제 사용량보다 크게 나타나게 됩니다.
->
-> 반면 ddpt 명령어의 oflag=sparse 옵션은 다음과 같은 역할을 합니다:
->
-> 1. 소스 이미지에서 할당되지 않은 블록(unallocation blocks)을 감지합니다.
-> 2. 이러한 unallocation blocks은 복사 과정에서 건너뛰게 됩니다.
-> 3. 결과적으로 실제 사용량에 해당하는 데이터만 타깃 볼륨에 복사됩니다.
->
-> **---**  
-> *** What is sparse wrriten ? : <https://sg.danny.cz/sg/ddpt.html#sparse>**  
-> *** ddpt man : <https://linux.die.net/man/8/ddpt>**  
->  
->  
-> **(8). 마지막으로 새 볼륨에 대한 스냅샷 C을 생성하고 크기를 관찰합니다.**  
-> **```**  
-> **전체 스냅샷 크기**  
-> **4.44 GiB**  
->  
-> **4762707968 bytes -> 4.435GiB**  
-> **```**  
->  
-> **=> (3) 작업에서 파일을 삭제하였지만, 스냅샷 B의 용량이 변경되지 않은것을 확인하였다. 하지만 trim 작업을 통해 allocated 되지 않은 block을 버린 후 다시 스냅샷 C를 생성하여 확인한 결과 정상적으로 스냅샷의 실제 전체 크기가 줄어든 것을 확인할 수 있다.**
+```text
+(1). 새로운 볼륨을 생성하여 장착 후 볼륨의 용량 사용을 위한 파일을 다운로드 합니다.
+(*현재 예시에서는 ISO 파일을 다운로드 함.)
+
+[root@-]# df -hT
+Filesystem       Type      Size  Used Avail Use% Mounted on
+..
+..
+/dev/nvme1n1     xfs        30G  6.7G   24G  22% /dd <--- 확인
+
+[root@-]# ls -al
+-rw-r--r--.  1 root root 4762707968 Sep 11 14:38 ubuntu-22.04.5-desktop-amd64.iso <--- 4.4GiB 용량의 파일
+-rw-r--r--.  1 root root 2136926208 Sep 11 18:46 ubuntu-22.04.5-live-server-amd64.iso <--- 2.0GiB 용량의 파일
+
+(2).nvme1n1 볼륨에 대한 스냅샷 A을 생성하고 크기를 관찰합니다.
+전체 스냅샷 크기
+6.4 GiB
+
+(3). 작은 용량을 차지하는 파일을 삭제하고 스냅샷 B를 생성한 뒤 스냅샷 크기를 관찰합니다.
+[root@ip-]# rm -f ubuntu-22.04.5-live-server-amd64.iso
+[root@ip-]# df -hT
+Filesystem       Type      Size  Used Avail Use% Mounted on
+/dev/nvme1n1     xfs        30G  4.7G   25G  16% /dd
+
+전체 스냅샷 크기
+6.4 GiB
+
+=> 해당 작업을 통해서 실제 마운트된 볼륨에서 파일 삭제를 진행, 변경된 블록 (*unallocated blocks) 를 생성합니다.
+
+(4). dd 명령어를 sparse.img 파일을 생성하고, 루프백 장치로 마운트합니다. 이렇게 하여 실제 마운트 포인트를 이용해 이미지에 접근할 수 있게되며, 이후 "fstrim" 명령어를 통해 마운트된 이미지 파일의 비할당된 블록(삭제된 파일의 블록)을 제거합니다. 해당 과정에서 생성된 sparse.img 파일의 실제 용량은 줄어들게 됩니다.
+
+[root@ip-]# dd if=/dev/nvme1n1 of=sparse.img bs=512 status=progress
+32203947008 bytes (32 GB, 30 GiB) copied, 186 s, 173 MB/s
+62914560+0 records in
+62914560+0 records out
+32212254720 bytes (32 GB, 30 GiB) copied, 186.047 s, 173 MB/s
+
+[root@ip-]# ls -al
+-rw-r--r--.  1 root root 32212254720 Feb 24 11:41 sparse.img <--- Check
+
+# mount -o nouuid,loop,discard sparse.img /loop
+* loop 옵션을 사용합니다.
+* https://linux.die.net/man/8/mount
+
+# fstrim /loop
+* fstrim is used on a mounted filesystem to discard (or "trim") blocks which are not in use by the filesystem.
+* https://man7.org/linux/man-pages/man8/fstrim.8.html
+
+(7). ddpt 명령어를 통해 트림(*trim)된 이미지를 빈 볼륨 (*30GiB 용량의 새 볼륨)에 복사합니다. 해당 과정을 통해 실제  할당된 블록에 대한 데이터만 가진 볼륨이 생성 됩니다.
+
+[root@ip-]# lsblk
+NAME          MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+nvme1n1       259:1    0   30G  0 disk /dd
+nvme5n1       259:8    0   30G  0 disk <--- 새 데이터 볼륨 B
+
+[root@ip-]# ddpt of=/dev/nvme5n1 if=sparse.img bs=512 oflag=sparse
+62914560+0 records in
+9305984+0 records out
+53608576 bypassed records out
+time to transfer data: 39.785926 secs at 809.64 MB/sec
+
+* ddpt - copies data between files and storage devices. Support for devices that understand the SCSI command set.
+---
+
+ddpt 명령어의 oflag=sparse 옵션은 이미지 복사 시 unallocation blocks을 건너뛰어 복사하는 기능을 제공합니다.
+
+일반적인 dd 명령어는 볼륨의 모든 블록을 그대로 복사하기 때문에, 삭제된 파일의 블록(unallocation blocks)도 함께 복사됩니다. 이렇게 되면 복사된 볼륨의 크기가 실제 사용량보다 크게 나타나게 됩니다.
+
+반면 ddpt 명령어의 oflag=sparse 옵션은 다음과 같은 역할을 합니다:
+
+소스 이미지에서 할당되지 않은 블록(unallocation blocks)을 감지합니다.
+
+이러한 unallocation blocks은 복사 과정에서 건너뛰게 됩니다.
+
+결과적으로 실제 사용량에 해당하는 데이터만 타깃 볼륨에 복사됩니다.
+
+---
+* What is sparse wrriten ? : https://sg.danny.cz/sg/ddpt.html#sparse
+* ddpt man : https://linux.die.net/man/8/ddpt
+
+(8). 마지막으로 새 볼륨에 대한 스냅샷 C을 생성하고 크기를 관찰합니다.
+전체 스냅샷 크기
+4.44 GiB
+
+4762707968 bytes -> 4.435GiB
+
+=> (3) 작업에서 파일을 삭제하였지만, 스냅샷 B의 용량이 변경되지 않은것을 확인하였다. 하지만 trim 작업을 통해 allocated 되지 않은 block을 버린 후 다시 스냅샷 C를 생성하여 확인한 결과 정상적으로 스냅샷의 실제 전체 크기가 줄어든 것을 확인할 수 있다.
+```
 
 ---
 

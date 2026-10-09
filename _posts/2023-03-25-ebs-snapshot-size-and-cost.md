@@ -127,7 +127,9 @@ EC2 managemnet console에서 생성된 스냅샷을 확인할 수 있지만, 아
 
 **스냅샷 데이터 크기 구하기 명령어**
 
-> $ aws ebs list-snapshot-blocks --snapshot-id your snapshot ID
+```text
+$ aws ebs list-snapshot-blocks --snapshot-id your snapshot ID
+```
 
 위의 명령어를 통해 "BlockIndex"의 수를 직접 구한 다음 블록 한개의 크기 (512KiB)를 곱해주면 스냅샷의 데이터 크기를 알 수 있다.
 
@@ -146,7 +148,9 @@ EC2 managemnet console에서 생성된 스냅샷을 확인할 수 있지만, 아
 
 아래의 명령어로 첫번째와 두번째 스냅샷의 크기 차이를 구할 수 있다.
 
-> $ aws ebs list-changed-blocks --first-snapshot-id "value" --second-snapshot-id "value"
+```text
+$ aws ebs list-changed-blocks --first-snapshot-id "value" --second-snapshot-id "value"
+```
 
 위의 명령어로 구한 블록 수에 블록의 크기를 곱하면 두번째 스냅샷의 데이터 크기를 구할 수 있다.
 

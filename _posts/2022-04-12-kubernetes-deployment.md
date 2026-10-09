@@ -52,134 +52,137 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 
 #### - 롤링업데이트 실습
 
-> ***디플로이먼트 배포**  
-> [root@master1 deploy]# cat deploy-v1.yaml  
-> apiVersion: apps/v1  
-> **kind: Deployment**  
-> metadata:  
->   name: test1   **#디플로이먼트 이름 정의**  
-> spec:  
->   replicas: 3  #3개의 레플리카 파드를 생성한다.  
->   selector:   **#디플로이먼트가 관리할 파드를 찾는 방법을 정의한다.** 파드 템플릿에 정의된 레이블을 선택한다.  
->     matchLabels:    #key,value의 쌍으로 매핑된다.  
->       **app: test1**  
->   template:    #파드 템플릿  
->     metadata:  
->       name: test1  
->       labels:    #파드에 붙일 레이블은 app: test1이다.  
->         **app: test1**  
->     spec:  
->       containers:  
->       - image: hewon16/test1:1  
->         name: test1  
->
+```text
+*디플로이먼트 배포
+[root@master1 deploy]# cat deploy-v1.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test1   #디플로이먼트 이름 정의
+spec:
+  replicas: 3  #3개의 레플리카 파드를 생성한다.
+  selector:   #디플로이먼트가 관리할 파드를 찾는 방법을 정의한다. 파드 템플릿에 정의된 레이블을 선택한다.
+    matchLabels:    #key,value의 쌍으로 매핑된다.
+      app: test1
+  template:    #파드 템플릿
+    metadata:
+      name: test1
+      labels:    #파드에 붙일 레이블은 app: test1이다.
+        app: test1
+    spec:
+      containers:
+      - image: hewon16/test1:1
+        name: test1
+```
 
-> *클러스터내 클라이언트 접속을 테스트하기 위해 서비스 구성하기  
->  
-> [root@master1 deploy]# cat test-svc.yaml  
-> apiVersion: v1  
-> **kind: Service**  
-> metadata:  
->   name: test-svc  
-> spec:  
->   ports:  
->   - port: 80  
->     targetPort: 8080  
->  **selector:   #디플로이먼트의 레이블과 같아야 한다.**  
->     app: test1  
->
+```text
+*클러스터내 클라이언트 접속을 테스트하기 위해 서비스 구성하기
 
-> #서비스를 먼저 구성하고 파드를 구성한다.  
-> [root@master1 deploy]# **kubectl apply -f test-svc.yaml**  
-> service/test-svc created  
->  
-> [root@master1 deploy]# **kubectl apply -f deploy-v1.yaml**  
-> deployment.apps/test1 created
+[root@master1 deploy]# cat test-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:   #디플로이먼트의 레이블과 같아야 한다.
+    app: test1
+```
 
-> * 서비스, 파드, 디플로이먼트, 레플리카셋의 리스트 확인  
-> [root@master1 deploy]# kubectl get all -o wide  
->  
-> NAME          READY   STATUS    RESTARTS   AGE    IP               NODE      NOMINATED NODE   READINESS GATES  
->  
-> pod/test1-**55d95bbb65**-cw8k2  1/1     Running   0      115s   172.16.166.171   node1  
-> pod/test1-**55d95bbb65**-nnpmt  1/1     Running   0      115s   172.16.180.57    master2  
-> pod/test1-**55d95bbb65**-shlll    1/1     Running   0       115s   172.16.136.28    master3  
->  
-> => 파드의 목록 확인  
-> => 파드 이름 중간의 문자열은 레플리카셋의 해시 값을 의미하며 레플리카셋이 이러한 파드를 관리함을 뜻함  
-> => (디플로이먼트이름 – 레플리카셋 해시값 – 파드 해시값 )으로 이뤄짐  
->  
->  
->  
-> NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE    SELECTOR  
-> service/kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP   4m2s   <none>  
-> **service/test-svc     ClusterIP   10.107.193.248   <none>        80/TCP    2m6s   app=test1**  
-> =>  서비스  
->  
-> NAME                    READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES            SELECTOR  
-> **deployment.apps/test1**   3/3     3            3           115s   test1        hewon16/test1:1   **app=test1**  
-> =>  디플로이먼트 이름 확인  
->  
->  
->  
-> NAME                               DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES            SELECTOR  
->  
-> replicaset.apps/**test1**-55d95bbb65   3         3         3       115s   test1        hewon16/test1:1   app=test1,pod-template-hash=55d95bbb65  
->  
-> => 레플리카셋 이름 확인  
-> => 디플로이먼트는 **파드 템플릿의 각 버전마다 하나씩 여러 개의 레플리카셋을 만든다.**  
-> **파드 템플릿의 해시값**을 사용하면 디플로이먼트에서 지정된 버전의 파드 템플릿에 관해 항상 동일한(기존의) 레플리카셋을 사용할 수 있다.
+```text
+#서비스를 먼저 구성하고 파드를 구성한다.
+[root@master1 deploy]# kubectl apply -f test-svc.yaml
+service/test-svc created
+
+[root@master1 deploy]# kubectl apply -f deploy-v1.yaml
+deployment.apps/test1 created
+```
+
+```text
+* 서비스, 파드, 디플로이먼트, 레플리카셋의 리스트 확인
+[root@master1 deploy]# kubectl get all -o wide
+
+NAME          READY   STATUS    RESTARTS   AGE    IP               NODE      NOMINATED NODE   READINESS GATES
+
+pod/test1-55d95bbb65-cw8k2  1/1     Running   0      115s   172.16.166.171   node1
+pod/test1-55d95bbb65-nnpmt  1/1     Running   0      115s   172.16.180.57    master2
+pod/test1-55d95bbb65-shlll    1/1     Running   0       115s   172.16.136.28    master3
+
+=> 파드의 목록 확인
+=> 파드 이름 중간의 문자열은 레플리카셋의 해시 값을 의미하며 레플리카셋이 이러한 파드를 관리함을 뜻함
+=> (디플로이먼트이름 – 레플리카셋 해시값 – 파드 해시값 )으로 이뤄짐
+
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE    SELECTOR
+service/kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP   4m2s   <none>
+service/test-svc     ClusterIP   10.107.193.248   <none>        80/TCP    2m6s   app=test1
+=>  서비스
+
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS   IMAGES            SELECTOR
+deployment.apps/test1   3/3     3            3           115s   test1        hewon16/test1:1   app=test1
+=>  디플로이먼트 이름 확인
+
+NAME                               DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES            SELECTOR
+
+replicaset.apps/test1-55d95bbb65   3         3         3       115s   test1        hewon16/test1:1   app=test1,pod-template-hash=55d95bbb65
+
+=> 레플리카셋 이름 확인
+=> 디플로이먼트는 파드 템플릿의 각 버전마다 하나씩 여러 개의 레플리카셋을 만든다.
+파드 템플릿의 해시값을 사용하면 디플로이먼트에서 지정된 버전의 파드 템플릿에 관해 항상 동일한(기존의) 레플리카셋을 사용할 수 있다.
+```
 
 ---
 
 #### - annotations을 활용한 deployment 개정정보(history) 관리
 
-> *** rollout history명령어**로 확인  
-> [root@master1 deploy]# kubectl rollout history deployment test1  
-> deployment.apps/test1  
-> REVISION  **CHANGE-CAUSE**  
-> 1                 **<none>**  
-> =>히스토리의 상세정보가 없어 불편  
->  
-> * 히스토리 확인 시 상세정보가 보여 작업이 편하므로 어노테이션을 세팅해준다!!  
-> * 아까 위에서 사용한 deploy-v1.yaml 파일에 metadata에 annotation을 추가해준다.  
-> [root@master1 deploy]# cat deploy-v1.yaml  
-> apiVersion: apps/v1  
-> kind: Deployment  
-> metadata:  
->   name: test1  
->   annotations:     **kubernetes.io/change-cause**: "test rolling update version 1:1"  #내용추가하기  
->  
-> spec:  
->   replicas: 3  
->   selector:  
->     matchLabels:  
->       app: test1  
->   template:  
->     metadata:  
->       name: test1  
->       labels:  
->         app: test1  
->     spec:  
->       containers:  
->       - image: hewon16/test1:1  
->         name: test1
+```text
+* rollout history명령어로 확인
+[root@master1 deploy]# kubectl rollout history deployment test1
+deployment.apps/test1
+REVISION  CHANGE-CAUSE
+1                    <none>
+=>히스토리의 상세정보가 없어 불편
 
->  
-> [root@master1 deploy]# kubectl apply -f deploy-v1.yaml  
-> deployment.apps/test1 **configured**  
->  
->  
-> [root@master1 deploy]# kubectl rollout history deployment test1  
-> deployment.apps/test1  
-> REVISION  **CHANGE-CAUSE**  
-> 1         **test rolling update version 1:1**  
->  
->  
-> [root@master1 deploy]# kubectl describe deployment  
-> Name:                   test1  
-> Annotations:            deployment.kubernetes.io/revision: 1  
->                         kubernetes.io/change-cause: **test rolling update version 1:1**
+* 히스토리 확인 시 상세정보가 보여 작업이 편하므로 어노테이션을 세팅해준다!!
+* 아까 위에서 사용한 deploy-v1.yaml 파일에 metadata에 annotation을 추가해준다.
+[root@master1 deploy]# cat deploy-v1.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test1
+  annotations:     kubernetes.io/change-cause: "test rolling update version 1:1"  #내용추가하기
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test1
+  template:
+    metadata:
+      name: test1
+      labels:
+        app: test1
+    spec:
+      containers:
+      - image: hewon16/test1:1
+        name: test1
+```
+
+```text
+[root@master1 deploy]# kubectl apply -f deploy-v1.yaml
+deployment.apps/test1 configured
+
+[root@master1 deploy]# kubectl rollout history deployment test1
+deployment.apps/test1
+REVISION  CHANGE-CAUSE
+1         test rolling update version 1:1
+
+[root@master1 deploy]# kubectl describe deployment
+Name:                   test1
+Annotations:            deployment.kubernetes.io/revision: 1
+                        kubernetes.io/change-cause: test rolling update version 1:1
+```
 
 ---
 
@@ -241,73 +244,69 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 
 ### 레디니스 프로브와 minReadySeconds의 필요성
 
-> 새 파드에서 레디니스 프로브의 실패 실습을 위한 yaml파일 구성하기  
->  
-> [root@master1 deploy]# cat deploy-v3.yaml  
-> apiVersion: apps/v1  
-> kind: Deployment  
-> metadata:  
->   name: test1  
-> spec:  
->   replicas: 3  
->   minReadySeconds: 10   #**설정하기**  
->   strategy:  
->     rollingUpdate:  
->       maxSurge: 1  
->       maxUnavailable: 0 **#디플로이먼트가 파드를 하나씩 교체하도록 maxUnavailable을 0으로 설정**  
->     type: RollingUpdate  
->   selector:  
->     matchLabels:  
->       app: test1  
->   template:  
->     metadata:  
->       name: test1  
->       labels:  
->         app: test1  
->     spec:  
->       containers:  
->       - image: hewon16/test1:3 **#이 이미지는 에러가 발생하도록 만들어진 샘플**  
->         name: test1  
->         readinessProbe:  
->             periodSeconds: 1      **# 매초마다 실행될 레디니스 프로브를 정의한다.**  
->             httpGet:      #**레디니스 프로브는 컨테이너에 HTTP GET요청을 수행한다.**  
->                 path: /  
->                 port: 8080
+```text
+새 파드에서 레디니스 프로브의 실패 실습을 위한 yaml파일 구성하기
 
-> [root@master1 deploy]# kubectl apply -f deploy-v3.yaml  
->  
-> [root@master1 deploy]# kubectl rollout status deployment test1  
->  
-> [root@master1 deploy]# kubectl rollout status deployment test1  
-> Waiting for deployment "test1" rollout to finish: 1 out of 3 new replicas have been updated...  
-> error: deployment "test1" exceeded its progress deadline  
->  
->  
->
-> ---
->
->  
-> [root@master1 ~]# kubectl get all -o wide  
-> NAME   READY   STATUS    RESTARTS   AGE    IP     NODE      NOMINATED NODE  
-> pod/test1-6bc7bd84c9-2c8vh   **0/1**     Running   0          109s   172.16.166.144   node1  
-> => 사용 가능할 때까지 롤아웃 프로세스는 새 파드를 만들지 않으며 **maxUnavailable속성값 0 때문에 원래 파드도 제거되지 않는다.**  
->  
-> ......  
->  
-> NAME          DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES            SELECTOR  
-> **replicaset.apps/test1-6bc7bd84c9   1         1         0       109s   test1        hewon16/test1:3   app=test1,pod-template-hash=6bc7bd84c9**  
->  
-> =**> 새 레플리카만 하나 시작되고 롤아웃 프로세스는 계속되지 않는다.**  
->  
-> **replicaset.apps/test1-7b9d5b9588   3         3         3       35h    test1        hewon16/test1:2   app=test1,pod-template-hash=7b9d5b9588**  
-> replicaset.apps/test1-84b5cd9887   0         0         0       35h    test1        hewon16/test1:3   app=test1,pod-template-hash=84b5cd9887  
->  
->  
->  
-> 중요:  
->   **minReadySeconds를 올바르게 설정하지 않고 레디니스 프로브만 정의하는 경우 레디니스 프로브의 첫 번째 호출이 성공하면 즉시 새 파드가 사용 가능한 것으로 간주된다.**  
->   **레디니스 프로브가 곧 실패하면 모든 파드에서 잘못된 버전이 롤아웃된다.** 따라서 minReadySeconds를 적절하게 설정해야 한다.  
->
+[root@master1 deploy]# cat deploy-v3.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test1
+spec:
+  replicas: 3
+  minReadySeconds: 10   #설정하기
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0 #디플로이먼트가 파드를 하나씩 교체하도록 maxUnavailable을 0으로 설정
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: test1
+  template:
+    metadata:
+      name: test1
+      labels:
+        app: test1
+    spec:
+      containers:
+      - image: hewon16/test1:3 #이 이미지는 에러가 발생하도록 만들어진 샘플
+        name: test1
+        readinessProbe:
+            periodSeconds: 1      # 매초마다 실행될 레디니스 프로브를 정의한다.
+            httpGet:      #레디니스 프로브는 컨테이너에 HTTP GET요청을 수행한다.
+                path: /
+                port: 8080
+```
+
+```text
+[root@master1 deploy]# kubectl apply -f deploy-v3.yaml
+
+[root@master1 deploy]# kubectl rollout status deployment test1
+
+[root@master1 deploy]# kubectl rollout status deployment test1
+Waiting for deployment "test1" rollout to finish: 1 out of 3 new replicas have been updated...
+error: deployment "test1" exceeded its progress deadline
+
+[root@master1 ~]# kubectl get all -o wide
+NAME   READY   STATUS    RESTARTS   AGE    IP     NODE      NOMINATED NODE
+pod/test1-6bc7bd84c9-2c8vh   0/1     Running   0          109s   172.16.166.144   node1
+=> 사용 가능할 때까지 롤아웃 프로세스는 새 파드를 만들지 않으며 maxUnavailable속성값 0 때문에 원래 파드도 제거되지 않는다.
+
+......
+
+NAME          DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES            SELECTOR
+replicaset.apps/test1-6bc7bd84c9   1         1         0       109s   test1        hewon16/test1:3   app=test1,pod-template-hash=6bc7bd84c9
+
+=> 새 레플리카만 하나 시작되고 롤아웃 프로세스는 계속되지 않는다.
+
+replicaset.apps/test1-7b9d5b9588   3         3         3       35h    test1        hewon16/test1:2   app=test1,pod-template-hash=7b9d5b9588
+replicaset.apps/test1-84b5cd9887   0         0         0       35h    test1        hewon16/test1:3   app=test1,pod-template-hash=84b5cd9887
+
+중요:
+  minReadySeconds를 올바르게 설정하지 않고 레디니스 프로브만 정의하는 경우 레디니스 프로브의 첫 번째 호출이 성공하면 즉시 새 파드가 사용 가능한 것으로 간주된다.
+  레디니스 프로브가 곧 실패하면 모든 파드에서 잘못된 버전이 롤아웃된다. 따라서 minReadySeconds를 적절하게 설정해야 한다.
+```
 
 ---
 
@@ -369,65 +368,69 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 
 * 실습
 
-> [root@master1 deploy]# cat deploy-liveness-probe.yaml  
-> apiVersion: apps/v1  
-> kind: Deployment  
-> metadata:  
->   name: test1  
-> spec:  
->   replicas: 3  
->   selector:  
->     matchLabels:  
->       app: test1  
->   template:  
->     metadata:  
->       name: test1  
->       labels:  
->         app: test1  
->     spec:  
->       containers:  
->       - image: hewon16/test1:1  
->         name: test1  
->         ports:  
->         - name: test1  
->           containerPort: 8080  
->         l**ivenessProbe:**  
->  **exec:**  
->  **command:**  
->  **- ls**  
->  **- /var/ready**
+```text
+[root@master1 deploy]# cat deploy-liveness-probe.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: test1
+  template:
+    metadata:
+      name: test1
+      labels:
+        app: test1
+    spec:
+      containers:
+      - image: hewon16/test1:1
+        name: test1
+        ports:
+        - name: test1
+          containerPort: 8080
+        livenessProbe:
+          exec:
+            command:
+            - ls
+            - /var/ready
+```
 
-> [root@master1 deploy]# kubectl apply -f  deploy-liveness-probe.yaml  
-> deployment.apps/test1 created  
->  
-> [root@master1 deploy]# kubectl get pod  
-> NAME                     READY   STATUS             RESTARTS   AGE  
-> test1-6bb7db76cd-c2bg8   0/1     CrashLoopBackOff   17         48m  
-> test1-6bb7db76cd-pq2l2   0/1     CrashLoopBackOff   17         48m  
-> test1-6bb7db76cd-qdnsg   0/1     CrashLoopBackOff   17         48m  
->  
-> #에러가 날것이다 상세정보를 통해 속성값 및 에러를 알아보자!  
-> [root@master1 deploy]# kubectl describe pod **test1-6bb7db76cd-c2bg8**  
->  
->  State:  Waiting  
->  **Reason: CrashLoopBackOff**  
-> Last State:     **Terminated**  
-> Reason:       **Error**  
->  Exit Code:    137  
-> Started:      Mon, 10 May 2021 13:50:55 +0900  
-> Finished:     Mon, 10 May 2021 13:51:55 +0900  
-> Ready:          False  
-> Restart Count:  17
->
-> **Liveness:**       exec [ls /var/ready] delay=0s timeout=1s period=10s #success=1 #failure=3
->
-> -Delay ( 지연=0초 ) : 컨테이너가 시작된 후 바로 프로브가 시작된다는 것을 나타냄
->
-> -Timeout ( 제한시간=1초 ): 제한 시간이 1초로 설정돼 있어 컨테이너가 1초 안에 응답           해야함 그렇지 않으면 프로브가 실패한 것으로 카운트된다.
->
-> -Period ( 기간=10초 ): 컨테이너는 10초마다 프로브를 수행
->
-> -Failure ( 실패=연속3회 ): 프로브가 연속 3번 실패하면 컨테이너가 다시 시작된다.
+```text
+[root@master1 deploy]# kubectl apply -f  deploy-liveness-probe.yaml
+deployment.apps/test1 created
+
+[root@master1 deploy]# kubectl get pod
+NAME                     READY   STATUS             RESTARTS   AGE
+test1-6bb7db76cd-c2bg8   0/1     CrashLoopBackOff   17         48m
+test1-6bb7db76cd-pq2l2   0/1     CrashLoopBackOff   17         48m
+test1-6bb7db76cd-qdnsg   0/1     CrashLoopBackOff   17         48m
+
+#에러가 날것이다 상세정보를 통해 속성값 및 에러를 알아보자!
+[root@master1 deploy]# kubectl describe pod test1-6bb7db76cd-c2bg8
+
+ State:  Waiting
+ Reason:  CrashLoopBackOff
+Last State:     Terminated
+Reason:       Error
+ Exit Code:    137
+Started:      Mon, 10 May 2021 13:50:55 +0900
+Finished:     Mon, 10 May 2021 13:51:55 +0900
+Ready:          False
+Restart Count:  17
+
+Liveness:       exec [ls /var/ready] delay=0s timeout=1s period=10s #success=1 #failure=3
+
+-Delay ( 지연=0초 ) : 컨테이너가 시작된 후 바로 프로브가 시작된다는 것을 나타냄
+
+-Timeout ( 제한시간=1초 ): 제한 시간이 1초로 설정돼 있어 컨테이너가 1초 안에 응답           해야함 그렇지 않으면 프로브가 실패한 것으로 카운트된다.
+
+-Period ( 기간=10초 ): 컨테이너는 10초마다 프로브를 수행
+
+-Failure ( 실패=연속3회 ): 프로브가 연속 3번 실패하면 컨테이너가 다시 시작된다.
+```
 
 ---
 
@@ -474,94 +477,83 @@ tistory_url: https://codemonkyu.tistory.com/entry/kubernetes-%EC%BF%A0%EB%B2%84%
 
 **2단계:** 롤링업데이트를 시켜 레디니스프로브를 만족하지 못하는 새버전의 파드 상태를 관찰한다. 240초가 지날 경우 레디니스 프로브를 만족하는 파드가 어떻게 되는지 확인하고 360초 후에 롤아웃이 된 새버전의 파드는 레디니스 프로브를 만족하지 못할 경우 어떻게 될까? 즉 롤링업데이트가 멈추게 되는지 확인하자.
 
-> **1단계**  
-> #v1버전 yaml파일 만들기  
-> [root@master1 deploy]# cat deploy-minready-readiness-probe.yaml  
-> apiVersion: apps/v1  
-> kind: Deployment  
-> metadata:  
->   name: test1  
-> spec:  
->   replicas: 3  
->   **minReadySeconds: 360**  
->   strategy  
->     **rollingUpdate:**  
->  **maxSurge: 1**  
->  **maxUnavailable: 0**  
->     type: RollingUpdate  
->   selector:  
->     matchLabels:  
->       app: test1  
->   template:  
->     metadata:  
->       name: test1  
->       labels:  
->         app: test1  
->     spec:  
->       containers:  
->       - image: hewon16/test1:1  
->         name: test1  
->         ports:  
->         - name: test1  
->           containerPort: 8080  
->        **readinessProbe:**  
->  **initialDelaySeconds: 240**  
->  **periodSeconds: 5**  
->  **exec:**  
->  **command:**  
->  **- ls**  
->  **- /var/ready**  
->  
->  
-> [root@master1 deploy]# kubectl apply -f deploy-minready-readiness-probe.yaml  
-> deployment.apps/test1 created  
->  
-> #생성된 pod를 확인한다.  
-> [root@master1 deploy]# kubectl get pod  
-> NAME                     READY   STATUS    RESTARTS   AGE  
-> test1-7c99bd78c4-2d9rb   0/1     Running   0          112s  
-> test1-7c99bd78c4-wcdx5   0/1     Running   0          112s  
-> test1-7c99bd78c4-wrcwt   0/1     Running   0          112s  
->  
-> #생성된 pod에 /var/ready를 만들어준다.  
-> [root@master1 deploy]# kubectl exec test1-7c99bd78c4-2d9rb **-- touch /var/ready**  
-> [root@master1 deploy]# kubectl exec test1-7c99bd78c4-wcdx5 -- touch /var/ready  
-> [root@master1 deploy]# kubectl exec test1-7c99bd78c4-wrcwt  -- touch /var/ready  
->  
->
-> ---
->
->  
-> **2단계**  
-> **#새버전 v2를 배포하여본다.**  
-> [root@master1 deploy]# kubectl set image deployment test1 **test1=hewon16/test1:2  
->**
->
-> [root@master1 deploy]# kubectl get pod  
-> NAME                     READY   STATUS    RESTARTS   AGE
->
-> **test1-6cccdd977f-2ltwx   0/1     Running   0          18s**
->
-> test1-7c99bd78c4-2d9rb   1/1     Running   0          14m
->
-> test1-7c99bd78c4-wcdx5   1/1     Running   0          14m
->
-> test1-7c99bd78c4-wrcwt   1/1     Running   0          14m
->
->  
-> => 새버전의 v2파드가 ready 상태가 아니다.
->
->  
->
-> **새 파드인 v2파드에 /var/ready파일을 만들어준후 240초 기다리면 ready로 바뀐다.**
->
-> [root@master1 deploy]# kubectl exec test1-6cccdd977f-2ltwx -- touch /var/ready  
->  
->
-> **그리고 다음 차례의 롤아웃작업은 최소 ready 상태를 유지할 minReadySeconds 360초(6분)가 더 지나야 가능함을 정확히 확인한다.  총 걸리는 시간: ( initialDelaySeconds: 240 + minReadySeconds: 360 = 600(10분))**
->
->  
->
+```text
+1단계
+#v1버전 yaml파일 만들기
+[root@master1 deploy]# cat deploy-minready-readiness-probe.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test1
+spec:
+  replicas: 3
+  minReadySeconds: 360
+  strategy
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: test1
+  template:
+    metadata:
+      name: test1
+      labels:
+        app: test1
+    spec:
+      containers:
+      - image: hewon16/test1:1
+        name: test1
+        ports:
+        - name: test1
+          containerPort: 8080
+        readinessProbe:
+          initialDelaySeconds: 240
+          periodSeconds: 5
+          exec:
+            command:
+            - ls
+            - /var/ready
+
+[root@master1 deploy]# kubectl apply -f deploy-minready-readiness-probe.yaml
+deployment.apps/test1 created
+
+#생성된 pod를 확인한다.
+[root@master1 deploy]# kubectl get pod
+NAME                     READY   STATUS    RESTARTS   AGE
+test1-7c99bd78c4-2d9rb   0/1     Running   0          112s
+test1-7c99bd78c4-wcdx5   0/1     Running   0          112s
+test1-7c99bd78c4-wrcwt   0/1     Running   0          112s
+
+#생성된 pod에 /var/ready를 만들어준다.
+[root@master1 deploy]# kubectl exec test1-7c99bd78c4-2d9rb -- touch /var/ready
+[root@master1 deploy]# kubectl exec test1-7c99bd78c4-wcdx5 -- touch /var/ready
+[root@master1 deploy]# kubectl exec test1-7c99bd78c4-wrcwt  -- touch /var/ready
+
+2단계
+#새버전 v2를 배포하여본다.
+[root@master1 deploy]# kubectl set image deployment test1 test1=hewon16/test1:2
+
+[root@master1 deploy]# kubectl get pod
+NAME                     READY   STATUS    RESTARTS   AGE
+
+test1-6cccdd977f-2ltwx   0/1     Running   0          18s
+
+test1-7c99bd78c4-2d9rb   1/1     Running   0          14m
+
+test1-7c99bd78c4-wcdx5   1/1     Running   0          14m
+
+test1-7c99bd78c4-wrcwt   1/1     Running   0          14m
+
+=> 새버전의 v2파드가 ready 상태가 아니다.
+
+새 파드인 v2파드에 /var/ready파일을 만들어준후 240초 기다리면 ready로 바뀐다.
+
+[root@master1 deploy]# kubectl exec test1-6cccdd977f-2ltwx -- touch /var/ready
+
+그리고 다음 차례의 롤아웃작업은 최소 ready 상태를 유지할 minReadySeconds 360초(6분)가 더 지나야 가능함을 정확히 확인한다.  총 걸리는 시간: ( initialDelaySeconds: 240 + minReadySeconds: 360 = 600(10분))
+```
 
 **결과**
 

@@ -63,25 +63,29 @@ NUMA 정책은 아래와 같이 크게 4가지 종류로 구분된다.
 
 내 Linux 서버에 어떠한 정책이 설정되어 있는지는 "numactl" 명령어를 통해 확인이 가능하다. 해당 명령어를 사용하기 위해서는 해당 명령어 패키지 설치가 선행되어야 한다.
 
-> [root@ip-172-31-26-171 ~]# numactl --show  
-> policy: default  
-> preferred node: current  
-> physcpubind: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  
-> cpubind: 0  
-> nodebind: 0  
-> membind: 0  
-> preferred:
+```text
+[root@ip-172-31-26-171 ~]# numactl --show
+policy: default
+preferred node: current
+physcpubind: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+cpubind: 0
+nodebind: 0
+membind: 0
+preferred:
+```
 
 아래의 명령어를 통해서는 NUMA의 노드와 노드별 할당된 CPU 번호 그리고 할당된 메모리 크기를 확인할 수 있다.
 
-> [root@ip-172-31-26-171 ~]# numactl -H  
-> available: 1 nodes (0)  <-- (1)  
-> node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  <-- (2)  
-> node 0 size: 31116 MB <-- (3)  
-> node 0 free: 30431 MB  
-> node distances: <-- (4)  
-> node   0  
->   0:  10
+```text
+[root@ip-172-31-26-171 ~]# numactl -H
+available: 1 nodes (0)  <-- (1)
+node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  <-- (2)
+node 0 size: 31116 MB <-- (3)
+node 0 free: 30431 MB
+node distances: <-- (4)
+node   0
+  0:  10
+```
 
 (1). NUMA 노드는 1개로 구성되어 있다.  
 (2). CPU는 총 16개로 이루어져있다. (프로세서 16개)
@@ -135,10 +139,12 @@ numad 는 백그라운드에서 동작하는 데몬으로 시스템상에서 프
 
 ## 메모리 할당에서 커널 파라미터 "vm.zone_reclaim_mode"
 
-> [root@ip-172-31-26-171 ~]# cat /proc/buddyinfo  
-> Node 0, zone      DMA      0      0      0      0      0      0      0      0      1      1      2  
-> Node 0, zone    DMA32      4      6      8      8      5      6      4      4      5      3    678  
-> Node 0, zone   Normal    186    502    786    443    136     84     56     21     16     25   6884
+```text
+[root@ip-172-31-26-171 ~]# cat /proc/buddyinfo
+Node 0, zone      DMA      0      0      0      0      0      0      0      0      1      1      2
+Node 0, zone    DMA32      4      6      8      8      5      6      4      4      5      3    678
+Node 0, zone   Normal    186    502    786    443    136     84     56     21     16     25   6884
+```
 
 "vm.zone_reclaim_mode" 파라미터의 값에 따라 위와 같이 각각의 메모리 영역(DMA, DMA32, ***Normal)**에서 메모리가 부족할 때 다른 Node의 메모리 영역을 할당 할 수 있도록 해준다.  아래의 내용을 확인해보자.
 

@@ -125,77 +125,77 @@ _출처_
 
 **b. `Convert2 RHEL` 설치**
 
-> **0. Centos7 시스템에서 커널 및 패키지 버전 최신화를 진행해줍니다.**  
-> # yum update -y  
-> # reboot  
->  
-> **1. Red Hat GPG 키를 다운로드합니다.**  
-> # curl -o /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release <https://security.access.redhat.com/data/fd431d51.txt>  
->  
-> * <https://security.access.redhat.com/data/fd431d51.txt> *  
->  
-> **2. RHEL 7으로의 변환의 경우 다음 명령을 입력합니다.**  
-> # curl -o /etc/yum.repos.d/convert2rhel.repo <https://cdn-public.redhat.com/content/public/repofiles/convert2rhel-for-rhel-7-x86_64.repo>  
->  
-> **3. RHEL 8로의 변환의 경우 다음 명령을 입력합니다.**  
-> # curl -o /etc/yum.repos.d/convert2rhel.repo <https://cdn-public.redhat.com/content/public/repofiles/convert2rhel-for-rhel-8-x86_64.repo>  
->  
-> * 최신 버전의 `Convert2RHEL` 리포지토리 파일을 사용하여 변환을 수행해야 합니다. 이전 버전의 리포지토리 파일을 이전에 설치한 경우 이전 버전을 제거하고 현재 버전을 설치합니다. *  
->  
-> **4. Convert2RHEL 설치**  
-> # yum -y install convert2rhel
+```text
+0. Centos7 시스템에서 커널 및 패키지 버전 최신화를 진행해줍니다.
+# yum update -y
+# reboot
+
+1. Red Hat GPG 키를 다운로드합니다.
+# curl -o /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release https://security.access.redhat.com/data/fd431d51.txt
+
+* https://security.access.redhat.com/data/fd431d51.txt *
+
+2. RHEL 7으로의 변환의 경우 다음 명령을 입력합니다.
+# curl -o /etc/yum.repos.d/convert2rhel.repo https://cdn-public.redhat.com/content/public/repofiles/convert2rhel-for-rhel-7-x86_64.repo
+
+3. RHEL 8로의 변환의 경우 다음 명령을 입력합니다.
+# curl -o /etc/yum.repos.d/convert2rhel.repo https://cdn-public.redhat.com/content/public/repofiles/convert2rhel-for-rhel-8-x86_64.repo
+
+* 최신 버전의 `Convert2RHEL` 리포지토리 파일을 사용하여 변환을 수행해야 합니다. 이전 버전의 리포지토리 파일을 이전에 설치한 경우 이전 버전을 제거하고 현재 버전을 설치합니다. *
+
+4. Convert2RHEL 설치
+# yum -y install convert2rhel
+```
 
 **c. convert2RHEL 실행 전 시스템 사전 분석**
 
-> ```  
-> # convert2rhel analyze  
->  
-> Continue with the system conversion? [y/n]: y  
->  
-> ...  
-> ...  
->  
->  
-> **========== Skip (Could not be checked due to other failures) ==========**  
-> (SKIP) ENSURE_KERNEL_MODULES_COMPATIBILITY::SKIP - Skipped action  
->      Description: This action was skipped due to another action failing.  
->      Diagnosis: Skipped because SUBSCRIBE_SYSTEM was not successful  
->      Remediations: Please ensure that the SUBSCRIBE_SYSTEM check passes so that this Action can evaluate  
-> your system  
-> (SKIP) VALIDATE_PACKAGE_MANAGER_TRANSACTION::SKIP - Skipped action  
->      Description: This action was skipped due to another action failing.  
->      Diagnosis: Skipped because ENSURE_KERNEL_MODULES_COMPATIBILITY and SUBSCRIBE_SYSTEM were not  
-> successful  
->      Remediations: Please ensure that the ENSURE_KERNEL_MODULES_COMPATIBILITY and SUBSCRIBE_SYSTEM check  
-> passes so that this Action can evaluate your system  
->  
-> **========== Overridable (Review and either fix or ignore the failure) ==========**  
-> (OVERRIDABLE) IS_LOADED_KERNEL_LATEST::INVALID_KERNEL_VERSION - Invalid kernel version detected  
->      Description: The loaded kernel version mismatch the latest one available in system repositories  
->      Diagnosis: The version of the loaded kernel is different from the latest version in system  
-> repositories.  
->      Latest kernel version available in updates: 3.10.0-1160.119.1.el7  
->      Loaded kernel version: 3.10.0-1160.76.1.el7  
->      Remediations: To proceed with the conversion, update the kernel version by executing the following  
-> step:  
->  
->     1. yum install kernel-3.10.0-1160.119.1.el7 -y  
->     2. reboot  
->     If you wish to ignore this message, set the environment variable  
-> 'CONVERT2RHEL_SKIP_KERNEL_CURRENCY_CHECK' to 1.  
->  
-> **========== Error (Must fix before conversion) ==========   <--- Error 부분에 대해서는 반드시 조치를 진행해야함**  
-> (ERROR) SUBSCRIBE_SYSTEM::SYSTEM_NOT_REGISTERED - Not registered with RHSM  
->      Description: This system must be registered with rhsm in order to get access to the RHEL rpms. In  
-> this case, the system was not already registered and no credentials were given to convert2rhel to  
-> register it.  
->      Diagnosis: N/A  
->      Remediations: You may either register this system via subscription-manager before running  
-> convert2rhel or give convert2rhel credentials to do that for you. The credentials convert2rhel would  
-> need are either activation_key and organization or username and password. You can set these in a config  
-> file and then pass the file to convert2rhel with the --config-file option.  
->  
-> ```
+```text
+# convert2rhel analyze
+
+Continue with the system conversion? [y/n]: y
+
+...
+...
+
+========== Skip (Could not be checked due to other failures) ==========
+(SKIP) ENSURE_KERNEL_MODULES_COMPATIBILITY::SKIP - Skipped action
+     Description: This action was skipped due to another action failing.
+     Diagnosis: Skipped because SUBSCRIBE_SYSTEM was not successful
+     Remediations: Please ensure that the SUBSCRIBE_SYSTEM check passes so that this Action can evaluate
+your system
+(SKIP) VALIDATE_PACKAGE_MANAGER_TRANSACTION::SKIP - Skipped action
+     Description: This action was skipped due to another action failing.
+     Diagnosis: Skipped because ENSURE_KERNEL_MODULES_COMPATIBILITY and SUBSCRIBE_SYSTEM were not
+successful
+     Remediations: Please ensure that the ENSURE_KERNEL_MODULES_COMPATIBILITY and SUBSCRIBE_SYSTEM check
+passes so that this Action can evaluate your system
+
+========== Overridable (Review and either fix or ignore the failure) ==========
+(OVERRIDABLE) IS_LOADED_KERNEL_LATEST::INVALID_KERNEL_VERSION - Invalid kernel version detected
+     Description: The loaded kernel version mismatch the latest one available in system repositories
+     Diagnosis: The version of the loaded kernel is different from the latest version in system
+repositories.
+     Latest kernel version available in updates: 3.10.0-1160.119.1.el7
+     Loaded kernel version: 3.10.0-1160.76.1.el7
+     Remediations: To proceed with the conversion, update the kernel version by executing the following
+step:
+
+    1. yum install kernel-3.10.0-1160.119.1.el7 -y
+    2. reboot
+    If you wish to ignore this message, set the environment variable
+'CONVERT2RHEL_SKIP_KERNEL_CURRENCY_CHECK' to 1.
+
+========== Error (Must fix before conversion) ==========   <--- Error 부분에 대해서는 반드시 조치를 진행해야함
+(ERROR) SUBSCRIBE_SYSTEM::SYSTEM_NOT_REGISTERED - Not registered with RHSM
+     Description: This system must be registered with rhsm in order to get access to the RHEL rpms. In
+this case, the system was not already registered and no credentials were given to convert2rhel to
+register it.
+     Diagnosis: N/A
+     Remediations: You may either register this system via subscription-manager before running
+convert2rhel or give convert2rhel credentials to do that for you. The credentials convert2rhel would
+need are either activation_key and organization or username and password. You can set these in a config
+file and then pass the file to convert2rhel with the --config-file option.
+```
 
 **d. Error List 에 대한 조치 진행**
 
@@ -217,19 +217,21 @@ _출처_
 
 **f. RHEL 시스템으로 변환**
 
-> **1. `Convert2 RHEL` 유틸리티를 시작합니다.**  
-> # convert2rhel  
->  
-> **2. 성공적으로 전환이 완료 되었는지 확인 합니다.**  
-> # cat /etc/os*  
-> NAME="Red Hat Enterprise Linux Server"  
-> VERSION="7.9 (Maipo)"  
-> ID="rhel"  
-> ID_LIKE="fedora"  
-> VARIANT="Server"  
-> VARIANT_ID="server"  
-> VERSION_ID="7.9"  
-> PRETTY_NAME="Red Hat Enterprise Linux Server 7.9 (Maipo)"  
-> ANSI_COLOR="0;31"  
-> CPE_NAME="cpe:/o:redhat:enterprise_linux:7.9:GA:server"  
-> HOME_URL="<https://www.redhat.com/>"
+```text
+1. `Convert2 RHEL` 유틸리티를 시작합니다.
+# convert2rhel
+
+2. 성공적으로 전환이 완료 되었는지 확인 합니다.
+# cat /etc/os*
+NAME="Red Hat Enterprise Linux Server"
+VERSION="7.9 (Maipo)"
+ID="rhel"
+ID_LIKE="fedora"
+VARIANT="Server"
+VARIANT_ID="server"
+VERSION_ID="7.9"
+PRETTY_NAME="Red Hat Enterprise Linux Server 7.9 (Maipo)"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:redhat:enterprise_linux:7.9:GA:server"
+HOME_URL="https://www.redhat.com/"
+```

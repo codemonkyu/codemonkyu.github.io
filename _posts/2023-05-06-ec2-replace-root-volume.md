@@ -132,32 +132,36 @@ AMI을 이용한 루트 볼륨 교체를 진행해 보겠다. 우선 Amazon linu
 
 - 볼륨 용량이 변경되었는지 확인 (20GIB -> 25GIB로 변경)
 
-> $ df -h  
-> Filesystem      Size  Used Avail Use% Mounted on  
-> devtmpfs        4.0M     0  4.0M   0% /dev  
-> tmpfs           2.0G     0  2.0G   0% /dev/shm  
-> tmpfs           782M  8.4M  774M   2% /run  
-> /dev/xvda1       25G  1.7G   24G   7% /  
-> tmpfs           2.0G     0  2.0G   0% /tmp  
-> tmpfs           391M     0  391M   0% /run/user/1000
+```text
+$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        4.0M     0  4.0M   0% /dev
+tmpfs           2.0G     0  2.0G   0% /dev/shm
+tmpfs           782M  8.4M  774M   2% /run
+/dev/xvda1       25G  1.7G   24G   7% /
+tmpfs           2.0G     0  2.0G   0% /tmp
+tmpfs           391M     0  391M   0% /run/user/1000
+```
 
 - OS가 변경되었는지 확인
 
-> $ cat /etc/*release  
-> Amazon Linux release 2023 (Amazon Linux)  
-> NAME="Amazon Linux"  
-> VERSION="2023"  
-> ID="amzn"  
-> ID_LIKE="fedora"  
-> VERSION_ID="2023"  
-> PLATFORM_ID="platform:al2023"  
-> PRETTY_NAME="Amazon Linux 2023"  
-> ANSI_COLOR="0;33"  
-> CPE_NAME="cpe:2.3:o:amazon:amazon_linux:2023"  
-> HOME_URL="https://aws.amazon.com/linux/"  
-> BUG_REPORT_URL="https://github.com/amazonlinux/amazon-linux-2023"  
-> SUPPORT_END="2028-03-01"  
-> Amazon Linux release 2023 (Amazon Linux)
+```text
+$ cat /etc/*release
+Amazon Linux release 2023 (Amazon Linux)
+NAME="Amazon Linux"
+VERSION="2023"
+ID="amzn"
+ID_LIKE="fedora"
+VERSION_ID="2023"
+PLATFORM_ID="platform:al2023"
+PRETTY_NAME="Amazon Linux 2023"
+ANSI_COLOR="0;33"
+CPE_NAME="cpe:2.3:o:amazon:amazon_linux:2023"
+HOME_URL="https://aws.amazon.com/linux/"
+BUG_REPORT_URL="https://github.com/amazonlinux/amazon-linux-2023"
+SUPPORT_END="2028-03-01"
+Amazon Linux release 2023 (Amazon Linux)
+```
 
 ---
 

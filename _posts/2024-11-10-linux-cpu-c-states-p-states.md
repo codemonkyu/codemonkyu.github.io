@@ -62,64 +62,68 @@ Amazon EC2 Linux 인스턴스에 대한 프로세서 상태 제어
 
 프로세서 정보를 통해 Thread(s) per core /  Core(s) per socket 및 최소,최대 주파수를 확인할 수 있다.
 
-> **# lscpu**  
-> Architecture:             x86_64  
->   CPU op-mode(s):         32-bit, 64-bit  
->   Address sizes:          46 bits physical, 48 bits virtual  
->   Byte Order:             Little Endian  
-> **CPU(s):                   36**  
->   On-line CPU(s) list:    0-35  
-> Vendor ID:                GenuineIntel  
->   BIOS Vendor ID:         Intel  
->   **Model name:             Intel(R) Xeon(R) CPU E5-2666 v3 @ 2.90GHz**  
->     CPU family:           6  
->     Model:                63  
->     Thread(s) per core:   2  
->     Core(s) per socket:   9  
->     Socket(s):            2  
->     Stepping:             2  
->     **CPU max MHz:          3500.0000**  
->  **CPU min MHz:          1200.0000**  
-> ...  
-> ...  
-> ...
+```text
+# lscpu
+Architecture:             x86_64
+  CPU op-mode(s):         32-bit, 64-bit
+  Address sizes:          46 bits physical, 48 bits virtual
+  Byte Order:             Little Endian
+CPU(s):                   36
+  On-line CPU(s) list:    0-35
+Vendor ID:                GenuineIntel
+  BIOS Vendor ID:         Intel
+  Model name:             Intel(R) Xeon(R) CPU E5-2666 v3 @ 2.90GHz
+    CPU family:           6
+    Model:                63
+    Thread(s) per core:   2
+    Core(s) per socket:   9
+    Socket(s):            2
+    Stepping:             2
+    CPU max MHz:          3500.0000
+    CPU min MHz:          1200.0000
+...
+...
+...
+```
 
 ### (2).  지원하는 C-state 확인
 
 아래의 명령어를 통해 현재 프로세서에서 지원하고 있는 C-state 종류 및 각 종류별 latency를 확인할 수 있다.
 
-> **# cpupower idle-info**  
-> CPUidle driver: intel_idle  
-> CPUidle governor: menu  
-> analyzing CPU 0:  
->  
-> Number of idle states: 5  
-> **Available idle states: POLL C1 C1E C3 C6**  
-> **POLL**:  
-> Flags/Description: CPUIDLE CORE POLL IDLE  
-> Latency: 0  
-> Usage: 478  
-> Duration: 7748  
-> **C1**:  
-> Flags/Description: MWAIT 0x00  
-> Latency: 2  
-> Usage: 656  
-> Duration: 83073  
-> **C1E**:  
-> Flags/Description: MWAIT 0x01  
-> Latency: 10  
-> Usage: 2981  
-> Duration: 494452  
-> **C3**:  
-> Flags/Description: MWAIT 0x10  
-> Latency: 33  
-> Usage: 6730  
-> Duration: 2975511  
-> **C6**:  
-> Flags/Description: MWAIT 0x20  
-> Latency: 133  
-> Usage: 91646  
-> Duration: 182905918
+```text
+# cpupower idle-info
+CPUidle driver: intel_idle
+CPUidle governor: menu
+analyzing CPU 0:
+
+Number of idle states: 5
+Available idle states: POLL C1 C1E C3 C6
+POLL:
+Flags/Description: CPUIDLE CORE POLL IDLE
+Latency: 0
+Usage: 478
+Duration: 7748
+C1:
+Flags/Description: MWAIT 0x00
+Latency: 2
+Usage: 656
+Duration: 83073
+C1E:
+Flags/Description: MWAIT 0x01
+Latency: 10
+Usage: 2981
+Duration: 494452
+C3:
+Flags/Description: MWAIT 0x10
+Latency: 33
+Usage: 6730
+Duration: 2975511
+C6:
+Flags/Description: MWAIT 0x20
+Latency: 133
+Usage: 91646
+Duration: 182905918
+```
 
 ### (3). 테스트 1 (C-state 비활성화 전)
 
