@@ -96,7 +96,7 @@ _출처_
 
 ## 4. 전환 절차 진행
 
-> ** 전환 진행전 최종 점검 사항 **  
+> **전환 진행전 최종 점검 사항**  
 > - 시스템을 백업하고 필요한 경우 복원할 수 있는지 확인합니다.  
 >  
 > - [[알려진 문제 및 제한 사항을](https://docs.redhat.com/ko/documentation/red_hat_enterprise_linux/8/html-single/converting_from_a_linux_distribution_to_rhel_using_the_convert2rhel_utility/index#ref_known-issues-and-limitations_assembly_troubleshooting-rhel-conversions)] 확인하고 시스템 변환이 지원되는지 확인합니다. 해결방법을 적용하십시오.  

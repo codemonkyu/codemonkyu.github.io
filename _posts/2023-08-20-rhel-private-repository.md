@@ -86,20 +86,20 @@ phoenixnap.com](https://phoenixnap.com/kb/rpm-vs-yum)
 
 ### 특정 패키지 다운로드하기
 
-**| 특정 패키지를 설치할 때 private 망의 서버에서는 패키지 관리자 "yum" 을 사용하여 레포지토리에 등록된 패키지를 설치할 수 없다. 때문에 이러한 상황에서, 인터넷이 가능한 서버에서 rpm 패키지를 다운로드 받아 Private 서버로 이동하여 패키지 설치를 진행하는데 이때 필요한 "yumdownloader" 명령어를 알아보자. ### yum-utils 패키지 설치 yumdownloader 명령어가 있는 yum-utils 패키지를 설치해야 합니다.**
+> 특정 패키지를 설치할 때 private 망의 서버에서는 패키지 관리자 "yum" 을 사용하여 레포지토리에 등록된 패키지를 설치할 수 없다. 때문에 이러한 상황에서, 인터넷이 가능한 서버에서 rpm 패키지를 다운로드 받아 Private 서버로 이동하여 패키지 설치를 진행하는데 이때 필요한 "yumdownloader" 명령어를 알아보자. ### yum-utils 패키지 설치 yumdownloader 명령어가 있는 yum-utils 패키지를 설치해야 합니다.
 
 ```bash
 $ sudo yum install yum-utils
 ```
 
-**### 사용 yumdownloader 명령어에 --downloadonly 옵션을 주고 다운받을 패키지를 지정하면 현재 폴더에 해당 패키지만 다운로드 됩니다.**
+yumdownloader 명령어에 --downloadonly 옵션을 주고 다운받을 패키지를 지정하면 현재 폴더에 해당 패키지만 다운로드 됩니다.
 
 ```bash
 $ yumdownloader --downloadonly gcc
 ```
 
-*** --downloadonly 옵션을 사용하면 특정 패키지만 다운로드 되기 때문에 해당 패키지 설치를 위해 --resolve 옵션 사용하여 의존성 패키지도 같이 다운로드 해준다.  
-* yum deplist 명령어를 통해 특정 패키지의 의존성 패키지가 무엇이 있는지 확인할 수 있다.**
+- --downloadonly 옵션을 사용하면 특정 패키지만 다운로드 되기 때문에 해당 패키지 설치를 위해 --resolve 옵션 사용하여 의존성 패키지도 같이 다운로드 해준다.  
+- yum deplist 명령어를 통해 특정 패키지의 의존성 패키지가 무엇이 있는지 확인할 수 있다.
 
 ```bash
 $ yum deplist yum-utils
@@ -135,7 +135,7 @@ Finished Dependency Resolution
 (13/13): mpfr-3.1.1-4.amzn2.0.2.x86_64.rpm
 ```
 
-**### gcc 패키지 및 의존성 패키지 설치**
+#### gcc 패키지 및 의존성 패키지 설치
 
 ```bash
 $sudo yum localinstall *.rpm
@@ -190,7 +190,7 @@ Is this ok [y/d/N]:
 외부에 존재하는 레포지토리 전체를 "reposync" 명령어를 통해 로컬에 다운로드 한다.  
 reposync하는 시점에 해당 레포지토리에 release된 패키지들은 다운로드 하게 된다.
 
-**### reposync 를 이용하여 특정 레포지토리에 release 되어 있는 패키지 다운로드하기**
+#### reposync 를 이용하여 특정 레포지토리에 release 되어 있는 패키지 다운로드하기
 
 ```bash
 $ mkdir testrepo
@@ -222,7 +222,7 @@ reposync을 통해 다운로드한 패키지들을 rpm / localinstall 명령어�
 
 때문에 해당 패키지들에 대해서 "repodata"를 생성해야지 **사설 레포지토리** 로 사용이 가능하다. repodata를 생성하기 위해서는 명령어 **createrepo**를 사용해야하며, 이를 위해 아래 명령어를 통해 해당 패키지를 설치해준다.
 
-**### createrepo 를 사용하여 repodata 생성하기**
+#### createrepo 를 사용하여 repodata 생성하기
 
 ```cmake
 $ yum install createrepo -y

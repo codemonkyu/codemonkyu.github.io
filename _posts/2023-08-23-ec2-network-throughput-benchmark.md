@@ -61,7 +61,7 @@ docs.oracle.com](https://docs.oracle.com/cd/E88353_01/html/E37839/iperf3-1.html)
 
 - vCPU : 36  
 Memory (GiB) : 72  
-Network Bandwidth (Gbps)*** : 10(Gbps)  
+Network Bandwidth (Gbps)\* : 10(Gbps)  
 EBS Bandwidth (Mbps) : 9,500
 
     4. Security Group
@@ -82,7 +82,7 @@ EBS Bandwidth (Mbps) : 9,500
 
 - vCPU : 36  
 Memory (GiB) : 72  
-Network Bandwidth (Gbps)*** : 10(Gbps)  
+Network Bandwidth (Gbps)\* : 10(Gbps)  
 EBS Bandwidth (Mbps) : 9,500
 
     4. Security Group
