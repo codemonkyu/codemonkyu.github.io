@@ -9,7 +9,7 @@ math: true
 
 ![](/assets/img/posts/rhel-private-repository/01.jpg)
 
-### 목차
+## 목차
 
 - yum.repo.d 알아보기  
 - RPM vs YUM  
@@ -26,7 +26,7 @@ RHEL 리눅스를 사용하는 경우 Red hat 레포지토리에서 원하는 �
 
 ---
 
-### "/etc/yum.repo.d" 살펴보기
+## "/etc/yum.repo.d" 살펴보기
 
 **경로 : /etc/yum.repos.d**  
 위의 경로에는 " *.repo " 형태의 파일이 존재하며, 해당 파일에는 아래와 같이 레포지토리에 대한 정보가 정의 되어 있다.
@@ -79,12 +79,12 @@ RPM and YUM are package managers used in the Red Hat Linux distros. This compari
 
 phoenixnap.com](https://phoenixnap.com/kb/rpm-vs-yum)
 
-#### 참고
+### 참고
 
 - RPM은 리포지토리를 지원하지 않으므로 패키지를 설치하려면 전체 패키지 파일 이름과 위치가 필요합니다.RPM은 설치된 패키지의 내부 데이터베이스를 보관하며 나중에 패키지 이름을 사용하여 설치된 패키지를 관리할 수 있도록 합니다.
 - 반면 YUM으로 패키지를 설치하려면 패키지 이름만 필요하고 패키지 위치는 필요하지 않습니다.이 도구는 /etc/yum.repos.d/ 디렉터리에서 repo 파일에 나열된 리포지토리를 검색하고 사용 가능한 최신 패키지 버전을 설치합니다.
 
-### 특정 패키지 다운로드하기
+## 특정 패키지 다운로드하기
 
 > 특정 패키지를 설치할 때 private 망의 서버에서는 패키지 관리자 "yum" 을 사용하여 레포지토리에 등록된 패키지를 설치할 수 없다. 때문에 이러한 상황에서, 인터넷이 가능한 서버에서 rpm 패키지를 다운로드 받아 Private 서버로 이동하여 패키지 설치를 진행하는데 이때 필요한 "yumdownloader" 명령어를 알아보자. ### yum-utils 패키지 설치 yumdownloader 명령어가 있는 yum-utils 패키지를 설치해야 합니다.
 
@@ -135,7 +135,7 @@ Finished Dependency Resolution
 (13/13): mpfr-3.1.1-4.amzn2.0.2.x86_64.rpm
 ```
 
-#### gcc 패키지 및 의존성 패키지 설치
+### gcc 패키지 및 의존성 패키지 설치
 
 ```bash
 $sudo yum localinstall *.rpm
@@ -169,7 +169,7 @@ Is this ok [y/d/N]:
 
 ---
 
-### yum 명령어의 동작 방식
+## yum 명령어의 동작 방식
 
 ![](/assets/img/posts/rhel-private-repository/02.png)
 
@@ -185,12 +185,12 @@ Is this ok [y/d/N]:
 
 ---
 
-### 사설 Repository 생성
+## 사설 Repository 생성
 
 외부에 존재하는 레포지토리 전체를 "reposync" 명령어를 통해 로컬에 다운로드 한다.  
 reposync하는 시점에 해당 레포지토리에 release된 패키지들은 다운로드 하게 된다.
 
-#### reposync 를 이용하여 특정 레포지토리에 release 되어 있는 패키지 다운로드하기
+### reposync 를 이용하여 특정 레포지토리에 release 되어 있는 패키지 다운로드하기
 
 ```bash
 $ mkdir testrepo
@@ -222,7 +222,7 @@ reposync을 통해 다운로드한 패키지들을 rpm / localinstall 명령어�
 
 때문에 해당 패키지들에 대해서 "repodata"를 생성해야지 **사설 레포지토리** 로 사용이 가능하다. repodata를 생성하기 위해서는 명령어 **createrepo**를 사용해야하며, 이를 위해 아래 명령어를 통해 해당 패키지를 설치해준다.
 
-#### createrepo 를 사용하여 repodata 생성하기
+### createrepo 를 사용하여 repodata 생성하기
 
 ```cmake
 $ yum install createrepo -y
@@ -272,7 +272,7 @@ private-testrepo                     TEST rhui base - testropo
 
 ---
 
-### 사설 Repository를 외부에서 이용 가능하도록  변경
+## 사설 Repository를 외부에서 이용 가능하도록  변경
 
 내가 만든 사설 레포지토리를 다른 클라이언트에서 사용하고 싶다면 해당 레포지토리를 간단하게 httpd을 사용해 다른 클라이언트에서 이를 사용할 수 있도록 해주면 된다.
 
