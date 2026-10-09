@@ -54,7 +54,7 @@ _그림2_
 
 우선 테스트 하기 위해 두 상태 제어 모두를 지원하는 프로세서에서 호스팅 되는 가상 서버가 필요하다. 나는 AWS사의 EC2 에서 "m4.16xlarge" 유형을 선택하여 테스트를 진행하였다. 모든 인스턴스 유형이 두 상태 제어를 지원하는 것이 아니기 때문에 아래의 AWS 공식 문서를 확인해볼 것을 권장한다,
 
-[Amazon EC2 Linux 인스턴스에 대한 프로세서 상태 제어](http://[]%20Amazon EC2 Linux 인스턴스에 대한 프로세서 상태 제어 - https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/processor_state_control.html)
+[Amazon EC2 Linux 인스턴스에 대한 프로세서 상태 제어](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/processor_state_control.html)
 
 #### (1). m4.16xlarge의 프로세서 확인
 

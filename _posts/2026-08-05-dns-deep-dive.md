@@ -33,20 +33,20 @@ IP 주소를 직접 외워서 쓴다고 생각해보자. 불편한 건 둘째 �
 
 이 위임 구조 때문에 이름 하나를 찾으려면 트리를 따라 내려가야 한다. 그게 아래 과정이다.
 
-브라우저가 `<http://www.example.com>`의 주소를 알아내는 전 과정이다.
+브라우저가 `www.example.com`의 주소를 알아내는 전 과정이다.
 
 ![dns-recursive-lookup](/assets/img/posts/dns-deep-dive/01.gif)
 _dns-recursive-lookup_
 
 순서를 말로 풀면 이렇다.
 
-1. 브라우저가 리졸버에게 묻는다. "<http://www.example.com의> A 레코드 알려줘."
+1. 브라우저가 리졸버에게 묻는다. "www.example.com의 A 레코드 알려줘."
 2. 리졸버가 루트 네임서버에게 묻는다. 루트는 답을 모른다. 대신 "`.com`은 저 서버가 담당해"라고 알려준다.
 3. 리졸버가 `.com` TLD 서버에게 묻는다. 여기도 답은 모르고 "`example.com`은 저 서버가 담당해"라고만 한다.
 4. 리졸버가 그 권한 네임서버에게 묻는다. 여기가 실제 답을 가진 유일한 곳이다.
 5. 리졸버가 답을 캐시에 넣고 브라우저에게 돌려준다.
 
-여기서 중요한 건 2번과 3번이 답이 아니라는 점이다. 루트도 TLD도 `<http://www.example.com>`의 IP를 모른다. 그들이 주는 건 "다음에 물어볼 곳"이고, 이걸 위임(referral)이라고 한다. 루트가 아는 건 TLD 목록뿐이다. 그래서 루트에 부하가 몰리지 않는다.
+여기서 중요한 건 2번과 3번이 답이 아니라는 점이다. 루트도 TLD도 `www.example.com`의 IP를 모른다. 그들이 주는 건 "다음에 물어볼 곳"이고, 이걸 위임(referral)이라고 한다. 루트가 아는 건 TLD 목록뿐이다. 그래서 루트에 부하가 몰리지 않는다.
 
 `dig +trace`로 실제 이 과정을 볼 수 있다. 내 환경에서 돌린 결과를 줄여 옮기면 이렇게 나온다.
 
@@ -142,11 +142,11 @@ $ sudo killall -HUP mDNSResponder
 실제로 해보면 이렇게 차이가 나온다.
 
 ```
-$ dig @8.8.8.8 <http://www.example.com> A +noall +answer +stats
-<http://www.example.com.> 300 IN  A   104.20.23.154
+$ dig @8.8.8.8 www.example.com A +noall +answer +stats
+www.example.com. 300 IN  A   104.20.23.154
 ;; Query time: 47 msec
 
-$ dig @192.168.1.1 <http://www.rfc-editor.org> A +noall +stats
+$ dig @192.168.1.1 www.rfc-editor.org A +noall +stats
 ;; Query time: 9 msec
 ```
 
@@ -155,7 +155,7 @@ $ dig @192.168.1.1 <http://www.rfc-editor.org> A +noall +stats
 권한 네임서버에 직접 물어보면 `aa`가 붙는다.
 
 ```
-$ dig @hera.ns.cloudflare.com <http://www.example.com> A +noall +comments
+$ dig @hera.ns.cloudflare.com www.example.com A +noall +comments
 ;; flags: qr aa rd; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
 ```
 
@@ -169,12 +169,12 @@ $ dig @hera.ns.cloudflare.com <http://www.example.com> A +noall +comments
 
 ![](/assets/img/posts/dns-deep-dive/05.gif)
 
-`<http://www.microsoft.com>`을 조회하면 CNAME이 두 번 이어진 뒤에야 A 레코드가 나온다. 실제 출력이다.
+`www.microsoft.com`을 조회하면 CNAME이 두 번 이어진 뒤에야 A 레코드가 나온다. 실제 출력이다.
 
 ```
-$ dig <http://www.microsoft.com> +noall +answer
-<http://www.microsoft.com.> 3143 IN CNAME <http://www.microsoft.com-c-3.edgekey.net.>
-<http://www.microsoft.com-c-3.edgekey.net.> 874 IN CNAME e13678.dscb.akamaiedge.net.
+$ dig www.microsoft.com +noall +answer
+www.microsoft.com. 3143 IN CNAME www.microsoft.com-c-3.edgekey.net.
+www.microsoft.com-c-3.edgekey.net. 874 IN CNAME e13678.dscb.akamaiedge.net.
 e13678.dscb.akamaiedge.net.        14 IN A     23.49.206.40
 ```
 
@@ -182,7 +182,7 @@ CNAME은 "이 이름은 저 이름의 별명이니 저기 가서 다시 물어�
 
 비용도 함께 봐야 한다. 각 단계는 새로운 이름 해석이고, 캐시에 없으면 그 이름을 다시 루트부터 찾아 내려갈 수도 있다. 체인이 길면 첫 접속이 그만큼 느려진다. 맨 아래 TTL이 14초인 것도 눈에 걸린다. 이 값은 곧 만료되니 자주 다시 조회된다.
 
-`dig <http://www.amazon.com>`도 CNAME 두 단이고, `dig docs.aws.amazon.com`은 세 단이다. 실무에서 흔한 구조다.
+`dig www.amazon.com`도 CNAME 두 단이고, `dig docs.aws.amazon.com`은 세 단이다. 실무에서 흔한 구조다.
 
 ---
 
@@ -204,11 +204,11 @@ _dns-ttl-propagation_
 TTL이 실제로 줄어드는 걸 눈으로 볼 수 있다. 같은 이름을 4초 간격으로 물어봤다.
 
 ```
-$ dig @8.8.8.8 <http://www.iana.org> +noall +answer   # t=+0s
-<http://www.iana.org.> 3387  IN  CNAME  <http://www.iana.org.cdn.cloudflare.net.>
+$ dig @8.8.8.8 www.iana.org +noall +answer   # t=+0s
+www.iana.org. 3387  IN  CNAME  www.iana.org.cdn.cloudflare.net.
 
-$ dig @8.8.8.8 <http://www.iana.org> +noall +answer   # t=+4s
-<http://www.iana.org.> 3383  IN  CNAME  <http://www.iana.org.cdn.cloudflare.net.>
+$ dig @8.8.8.8 www.iana.org +noall +answer   # t=+4s
+www.iana.org. 3383  IN  CNAME  www.iana.org.cdn.cloudflare.net.
 ```
 
 3387에서 3383으로 딱 4가 줄었다. 리졸버가 새로 조회한 게 아니라 캐시에 남은 잔량을 알려주고 있다는 증거다. TTL이 0이 되면 그때 다시 원본에 물어본다.
@@ -271,7 +271,7 @@ $ dig @8.8.8.8 cloudflare.com DNSKEY +dnssec +bufsize=4096 +noall +comments +sta
 이번엔 ANSWER가 3개 다 왔고 `tc`도 없다. 요즘은 이쪽이 기본이라 권한 서버들이 EDNS0로 1232바이트 정도를 광고한다.
 
 ```
-$ dig @hera.ns.cloudflare.com <http://www.example.com> A +noall +comments | grep EDNS
+$ dig @hera.ns.cloudflare.com www.example.com A +noall +comments | grep EDNS
 ; EDNS: version: 0, flags:; udp: 1232
 ```
 
@@ -350,8 +350,8 @@ DNS가 평문 UDP라는 사실이 왜 문제가 되는지부터 보면 자연스
 
 ## 참고 자료
 
-- [RFC 1034 - Domain Names, Concepts and Facilities](<https://www.rfc-editor.org/rfc/rfc1034.html)> — DNS의 개념과 위임 구조, CNAME 단독 존재 규칙의 원문
-- [RFC 1035 - Domain Names, Implementation and Specification](<https://www.rfc-editor.org/rfc/rfc1035.html)> — 메시지 포맷, 512바이트 제한, TC 플래그 정의
-- [RFC 6891 - Extension Mechanisms for DNS (EDNS(0))](<https://www.rfc-editor.org/rfc/rfc6891.html)> — UDP 버퍼 크기를 확장하는 방법
-- [Route 53 - Alias 레코드와 비Alias 레코드 중에서 선택](<https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html)> — Alias의 동작과 지원 대상, 요금 정책
-- [MDN - DNS](<https://developer.mozilla.org/ko/docs/Glossary/DNS)> — 짧고 쉬운 개요
+- [RFC 1034 - Domain Names, Concepts and Facilities](<https://www.rfc-editor.org/rfc/rfc1034.html>) — DNS의 개념과 위임 구조, CNAME 단독 존재 규칙의 원문
+- [RFC 1035 - Domain Names, Implementation and Specification](<https://www.rfc-editor.org/rfc/rfc1035.html>) — 메시지 포맷, 512바이트 제한, TC 플래그 정의
+- [RFC 6891 - Extension Mechanisms for DNS (EDNS(0))](<https://www.rfc-editor.org/rfc/rfc6891.html>) — UDP 버퍼 크기를 확장하는 방법
+- [Route 53 - Alias 레코드와 비Alias 레코드 중에서 선택](<https://docs.aws.amazon.com/ko_kr/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html>) — Alias의 동작과 지원 대상, 요금 정책
+- [MDN - DNS](<https://developer.mozilla.org/ko/docs/Glossary/DNS>) — 짧고 쉬운 개요
