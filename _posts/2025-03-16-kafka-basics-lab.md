@@ -228,7 +228,7 @@ CONTAINER ID   IMAGE                             COMMAND                  CREATE
 f646c888b259   confluentinc/cp-zookeeper:7.4.3   "/etc/confluent/dock…"   3 hours ago   Up 3 hours   2181/tcp, 2888/tcp, 3888/tcp, 0.0.0.0:22181->22181/tcp, :::22181->22181/tcp                                                                             zookeeper
 ```
 
-(3). [localhost:9000](http://localhost:9000) 포트로 “kafdrop” 모니터링 접속
+(3). localhost:9000 포트로 “kafdrop” 모니터링 접속
 
 Kafka Cluster 전체를 확인 - Zookeeper / Broker (Host 3대)
 

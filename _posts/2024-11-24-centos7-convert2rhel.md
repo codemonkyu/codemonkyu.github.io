@@ -74,7 +74,7 @@ _출처_
 
 ## 3. 변환 준비
 
-[참고 문헌](http://%20https://docs.redhat.com/ko/documentation/red_hat_enterprise_linux/8/html-single/converting_from_a_linux_distribution_to_rhel_using_the_convert2rhel_utility/index#proc_preparing-for-a-rhel-conversion_converting-using-the-command-line)
+[참고 문헌](https://docs.redhat.com/ko/documentation/red_hat_enterprise_linux/8/html-single/converting_from_a_linux_distribution_to_rhel_using_the_convert2rhel_utility/index#proc_preparing-for-a-rhel-conversion_converting-using-the-command-line)
 
 ### 3-1) 사전 요구 사항
 
@@ -121,7 +121,7 @@ _출처_
 **a. CentOS Linux에서 변환하는 경우 CentOS 리포지토리 URL을 업데이트 합니다.**
 
 > sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*  
-> sed -i 's|#baseurl=<http://mirror.centos.org>|baseurl=<https://vault.centos.org>|g' /etc/yum.repos.d/CentOS-*
+> sed -i 's|#baseurl=mirror.centos.org|baseurl=<https://vault.centos.org>|g' /etc/yum.repos.d/CentOS-*
 
 **b. `Convert2 RHEL` 설치**
 

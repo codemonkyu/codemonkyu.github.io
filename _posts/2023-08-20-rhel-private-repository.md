@@ -287,7 +287,7 @@ private-testrepo                     TEST rhui base - testropo
 - $mkdir repo <---repo폴더 생성
 - $cp packages /var/www/html/repo
 - $Createrepo . <- /var/www/html 경로에서 다시 repodata를 만들어준다.
-- [http://인스턴스공인IP/repo](http://xn--ip-he2ih03ea825eda740r/repo) 로 접속 - (e.g. <http://3.34.43.6/repo/>)
+- http://인스턴스공인IP/repo 로 접속 - (e.g. 3.34.43.6/repo/)
 
 ![](/assets/img/posts/rhel-private-repository/03.png)
 
