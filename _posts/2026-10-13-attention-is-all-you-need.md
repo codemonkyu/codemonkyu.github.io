@@ -295,17 +295,20 @@ RNN은 단어를 한 줄로 세워 읽어서 느리고 멀리 있는 단어를 �
 ## 학습 확인 질문
 
 1. 셀프 어텐션이 RNN보다 GPU에서 빠른 이유는 무엇인가?
+
    답: RNN은 이전 단어의 은닉 상태가 있어야 다음 단어를 계산할 수 있어 순차 처리가 강제된다. 셀프 어텐션은 모든 단어 쌍의 점수를 행렬 곱 한 번으로 동시에 계산하므로 순차 연산이 O(1)이다.
 
 2. √d_k로 나누지 않으면 어떤 일이 생기나?
+
    답: d_k가 커질수록 내적값의 분산이 커져 softmax 출력이 한 단어에 거의 1로 쏠린다. 이 영역에서는 기울기가 0에 가까워 학습이 잘 되지 않는다.
 
 3. 디코더의 셀프 어텐션에 마스크가 필요한 이유는?
+
    답: 학습 시 정답 문장 전체를 입력으로 넣는데, 마스크가 없으면 다음 단어(정답)를 미리 보고 예측하게 된다. 생성 시점과 같은 조건을 만들기 위해 미래 위치를 가린다.
 
 ## 참고 자료
 
-[1] Attention Is All You Need (원문, arXiv) - https://arxiv.org/abs/1706.03762
-[2] Transformer: A Novel Neural Network Architecture for Language Understanding (Google Research 블로그) - https://research.google/blog/transformer-a-novel-neural-network-architecture-for-language-understanding/
-[3] The Illustrated Transformer (Jay Alammar) - https://jalammar.github.io/illustrated-transformer/
-[4] The Annotated Transformer (Harvard NLP, 코드와 함께 읽기) - https://nlp.seas.harvard.edu/annotated-transformer/
+- [1] [Attention Is All You Need (원문, arXiv)](https://arxiv.org/abs/1706.03762)
+- [2] [Transformer: A Novel Neural Network Architecture for Language Understanding (Google Research 블로그)](https://research.google/blog/transformer-a-novel-neural-network-architecture-for-language-understanding/)
+- [3] [The Illustrated Transformer (Jay Alammar)](https://jalammar.github.io/illustrated-transformer/)
+- [4] [The Annotated Transformer (Harvard NLP, 코드와 함께 읽기)](https://nlp.seas.harvard.edu/annotated-transformer/)
