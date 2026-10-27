@@ -1,5 +1,5 @@
 ---
-title: "선형대수학 Ch.15 — 고유값을 빠르게 구하는 평균-곱 트릭 (Quick Eigenvalues)📅 2026-04-13🎥 출처: A quick trick for computing eigenvalues (3Blue1Brown)평균-곱 트릭 핵심 개념 요약"
+title: "선형대수학 Ch.15 — 고유값을 빠르게 구하는 평균-곱 트릭 (Quick Eigenvalues)"
 date: 2026-04-13 15:07:35 +0900
 categories: ["AI", "선형대수학"]
 tags: ["선형대수학", "3Blue1Brown"]
