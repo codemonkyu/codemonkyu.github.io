@@ -92,7 +92,7 @@ RoPE도 약점이 있다. 학습 때 2,048칸 길이의 글만 봤다면, 3만 �
 
 ## 다음 편
 
-다음 편은 #7 잔차 연결, LayerNorm, FFN이다. 어텐션 블록 바깥을 감싸는 부품들이 왜 거기 있는지, 그리고 원 논문의 Post-LN이 요즘 Pre-LN으로 바뀐 이유를 다룬다.
+다음 편은 [#7 잔차 연결, LayerNorm, FFN](/posts/transformer-07-residual-layernorm-ffn/)이다. 어텐션 블록 바깥을 감싸는 부품들이 왜 거기 있는지, 그리고 원 논문의 Post-LN이 요즘 Pre-LN으로 바뀐 이유를 다룬다.
 
 ## 학습 확인 질문
 
